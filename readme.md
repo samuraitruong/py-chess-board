@@ -4,6 +4,14 @@ python3 -m venv .venv
  . .venv/bin/activate 
  ./start.sh
 ```
+
+## Lint code before commit
+```
+
+pylint $(git ls-files '*.py')  
+
+```
+
 ## Request with custom FEN
 
 ```
