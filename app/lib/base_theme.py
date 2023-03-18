@@ -20,11 +20,11 @@ class Theme: # pylint: disable=too-few-public-methods
             image_name = 'b'+image_name
         else:
             image_name = 'w'+image_name
-        file_name = f'icons/{self.piece_set}/{image_name.lower()}.png'
+        file_name = f'app/pieces/{self.piece_set}/{image_name.lower()}.png'
 
-        svg_file = f'pieces/{self.piece_set}/{image_name.lower()}.svg'
+        svg_file = f'app/pieces/{self.piece_set}/{image_name.lower()}.svg'
 
-        svg_png_file = f'pieces/{self.piece_set}/{image_name.lower()}.svg.png'
+        svg_png_file = f'app/pieces/{self.piece_set}/{image_name.lower()}.svg.png'
         # skip convert if the file already converted
         if os.path.exists(svg_png_file):
             piece_image= Image.open(svg_png_file)
