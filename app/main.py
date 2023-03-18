@@ -12,4 +12,5 @@ def generate_chess_from_fen():
     fen = request.args.get('fen')
     size = int(request.args.get('size', "850"))
     board = Board(fen  = fen)
+    board.theme.set_piece_set(request.args.get('piece', "chessmonk"))
     return serve_pil_image(board.generate(), size)

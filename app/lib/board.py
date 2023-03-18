@@ -8,11 +8,8 @@ class Board:
         self.size = (850, 850)
         self.board = None
         self.theme = DefaultTheme()
-        self.margin_left = 25
-        self.margin_bottom = 25
+        self.frame_size = 25
         self.fen = fen or 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
-
-
 
     def generate(self):
         """Generate image"""
@@ -47,8 +44,8 @@ class Board:
         row=  8 - int(index/8)
 
         # print(index, row, col)
-        y_coord = (row-1) * square_size  + self.margin_bottom
-        x_coord = col * square_size + self.margin_left
+        y_coord = (row-1) * square_size  + self.frame_size
+        x_coord = col * square_size + self.frame_size
 
         shape = [(x_coord, y_coord), (x_coord+square_size, y_coord+square_size)]
         # cell_index = index + 1
@@ -83,3 +80,15 @@ class Board:
                         fill= self.theme.frame_text_color,
                         font= self.theme.font.get('regular')
                     )
+
+        drawer.rectangle(
+            (
+                self.frame_size,
+                self.frame_size,
+                800 + self.frame_size,
+                800 + self.frame_size
+            ),
+            fill=None,
+            outline= self.theme.border_outline_color,
+            width=2
+            )
