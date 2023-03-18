@@ -11,7 +11,7 @@ class Theme: # pylint: disable=too-few-public-methods
             "regular": ImageFont.truetype("Arial", 18)
         }
 
-    def get_symbol_image(self, symbol, size=(70,70)):
+    def get_symbol_image(self, symbol, size=(75, 75)):
         """Get the image"""
         image_name = symbol
         if image_name.lower() == image_name:

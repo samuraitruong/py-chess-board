@@ -62,7 +62,8 @@ class Board:
         piece = self.find_piece(row, col)
         piece_image = self.theme.get_symbol_image(piece)
         if piece_image:
-            self.board.paste(piece_image, (x_coord+20, y_coord+20), mask=piece_image)
+            padding = int((square_size - piece_image.width) /2)
+            self.board.paste(piece_image, (x_coord+padding, y_coord+padding), mask=piece_image)
         else:
             drawer.text((x_coord+50, y_coord+ 50),
                         self.find_piece(row, col),
