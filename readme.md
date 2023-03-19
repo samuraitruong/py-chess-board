@@ -59,7 +59,7 @@ http://localhost:8080/?fen=8/4Kn2/1p1P2p1/Q1B2kp1/1P1r4/3P1N1P/4N1n1/1B2b3&piece
 ### chessicons
 ![chessicons](https://chess-board.fly.dev/?fen=8/4Kn2/1p1P2p1/Q1B2kp1/1P1r4/3P1N1P/4N1n1/1B2b3%20w%20-%20-%20a5%20&piece=chessicons&size=400 "chessicons")
 ### celtic
-![chessmonk](https://chess-board.fly.dev/?fen=8/4Kn2/1p1P2p1/Q1B2kp1/1P1r4/3P1N1P/4N1n1/1B2b3%20w%20-%20-%20a5%20&piece=chessmonk&size=400 "chessmonk")
+![celtic](https://chess-board.fly.dev/?fen=8/4Kn2/1p1P2p1/Q1B2kp1/1P1r4/3P1N1P/4N1n1/1B2b3%20w%20-%20-%20a5%20&piece=celtic&size=400 "celtic")
 ### set1
 ![set1](https://chess-board.fly.dev/?fen=8/4Kn2/1p1P2p1/Q1B2kp1/1P1r4/3P1N1P/4N1n1/1B2b3%20w%20-%20-%20a5%20&piece=set1&size=400 "set1")
 ### alila
@@ -132,6 +132,20 @@ http://localhost:8080/?fen=8/4Kn2/1p1P2p1/Q1B2kp1/1P1r4/3P1N1P/4N1n1/1B2b3&piece
 ![merida_new](https://chess-board.fly.dev/?fen=8/4Kn2/1p1P2p1/Q1B2kp1/1P1r4/3P1N1P/4N1n1/1B2b3%20w%20-%20-%20a5%20&piece=merida_new&size=400 "merida_new")
 ### chessmonk
 ![chessmonk](https://chess-board.fly.dev/?fen=8/4Kn2/1p1P2p1/Q1B2kp1/1P1r4/3P1N1P/4N1n1/1B2b3%20w%20-%20-%20a5%20&piece=chessmonk&size=400 "chessmonk")
+
+## Theme
+
+### Default Theme -https://chess-board.fly.dev?theme=default
+![Default](https://chess-board.fly.dev "default)
+
+
+### Green Theme - https://chess-board.fly.dev?theme=green
+![Default](https://chess-board.fly.dev?theme=green "default)
+
+
+
+### Black and White - https://chess-board.fly.dev?theme=bw
+![BW](https://chess-board.fly.dev?theme=bw "default)
 
 
 ## Credit
