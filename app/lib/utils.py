@@ -4,6 +4,7 @@ from flask import send_file
 from app.lib.theme.green_theme import GreenTheme
 from app.lib.theme.default_theme import DefaultTheme
 from app.lib.theme.bw_theme import BlackWhiteTheme
+from app.lib.theme.orange_theme import OrangeTheme
 
 def serve_pil_image(pil_img, size=1000):
     """Response the image to request client"""
@@ -32,4 +33,6 @@ def get_theme(name):
     if name == 'bw':
         return BlackWhiteTheme()
 
+    if name == 'orange':
+        return OrangeTheme()
     return DefaultTheme()

@@ -6,6 +6,17 @@ from app.lib.utils import serve_pil_image
 
 api = Flask(__name__)
 
+@api.after_request
+def add_header(r):
+    """
+    Add no-cache header to response headers
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
+
 @api.route("/")
 def generate_chess_from_fen():
     """The api entrypoint to generate board image from fen"""

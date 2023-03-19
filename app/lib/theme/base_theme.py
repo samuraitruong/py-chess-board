@@ -7,7 +7,8 @@ class Theme: # pylint: disable=too-few-public-methods
     """Theme base"""
     def __init__(self, piece_set):
         self.piece_set = piece_set
-
+        self.square_border_width = 0
+        self.square_border_color = None
         self.font = {
             "large" : ImageFont.truetype("app/fonts/arial/arial.ttf", 24),
             "regular": ImageFont.truetype("app/fonts/arial/arial.ttf", 18)

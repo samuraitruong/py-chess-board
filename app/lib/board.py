@@ -50,10 +50,15 @@ class Board:
         shape = [(x_coord, y_coord), (x_coord+square_size, y_coord+square_size)]
         # cell_index = index + 1
         # if cell_index in [2,4,6,8,64, 62, 60, 58]:
+        color = self.theme.black_color
         if (row %2 ==0 and col %2 == 1) or (row %2 ==1 and col %2 == 0):
-            square.rectangle(shape, fill =self.theme.white_color)
-        else:
-            square.rectangle(shape, fill = self.theme.black_color)
+            color = self.theme.white_color
+
+        square.rectangle(shape,
+                         fill = color,
+                         width= self.theme.square_border_width,
+                         outline= self.theme.square_border_color
+                    )
 
         drawer = ImageDraw.Draw(self.board )
         piece = self.find_piece(row, col)
@@ -67,6 +72,7 @@ class Board:
                         fill='red',
                         font= self.theme.font.get('large')
                     )
+
 
     def draw_frame(self):
         """ Draw the number and column name on edge of board"""
@@ -92,10 +98,10 @@ class Board:
 
         drawer.rectangle(
             (
-                self.frame_size,
-                self.frame_size,
-                800 + self.frame_size,
-                800 + self.frame_size
+                self.frame_size-2,
+                self.frame_size-2,
+                800 + self.frame_size +2,
+                800 + self.frame_size +2
             ),
             fill=None,
             outline= self.theme.border_outline_color,
