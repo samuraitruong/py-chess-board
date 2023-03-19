@@ -4,7 +4,7 @@ from app.lib.theme.base_theme import Theme
 
 class OrangeTheme(Theme): # pylint: disable=too-few-public-methods
     """Provides default look and feels"""
-    def __init__(self, piece_set = 'cburnett'):
+    def __init__(self, piece_set = 'chessnut'):
         """constructor"""
         super().__init__(piece_set)
         self.white_color = '#FF7900'

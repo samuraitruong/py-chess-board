@@ -1,10 +1,32 @@
+## Introduction
+
+This is the python API to render the chessboard as image from FEN input, it supports various different piece set and themes.  The most popular use of this maybe  the website that display puzzle
 ## Development
 ```sh
 python3 -m venv .venv
  . .venv/bin/activate
  ./start.sh
 ```
+
+If you prefer development with docker just simply run
+
+```sh
+docker compose up
+
+```
 The live demo deployed on: https://chess-board.fly.dev
+
+## API params
+### Draw chessboard with FEN input
+- **fen**: the valid FEN string of the board
+- **size**: the size of output image
+- **theme**: color theme of the board support (orange, green, bw and default)
+- **piece**: the piece set name, please refer below to see the full list
+
+example
+```
+curl https://chess-board.fly.dev/??fen=8/4Kn2/1p1P2p1/Q1B2kp1/1P1r4/3P1N1P/4N1n1/1B2b3%20w%20-%20-%20a5%20&piece=chessmonk&theme=orange&size=500
+```
 ## Lint code before commit
 ```
 
