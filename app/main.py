@@ -1,6 +1,5 @@
 """API"""
-from waitress import serve
-import os
+# from waitress import serve
 from flask import Flask, request
 from app.lib.board import Board
 from app.lib.utils import serve_pil_image

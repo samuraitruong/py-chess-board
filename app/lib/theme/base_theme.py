@@ -32,7 +32,11 @@ class Theme: # pylint: disable=too-few-public-methods
 
         if os.path.exists(svg_file):
 
-            svg2png(url = svg_file, write_to=svg_file + ".png", output_width = 512, output_height = 512)
+            svg2png(url = svg_file,
+                    write_to=svg_file + ".png",
+                    output_width = 512,
+                    output_height = 512
+                )
             file_name = svg_file + ".png"
 
         if os.path.exists(file_name):
@@ -42,4 +46,5 @@ class Theme: # pylint: disable=too-few-public-methods
         return None
 
     def set_piece_set(self, piece_set):
+        """set piece set"""
         self.piece_set = piece_set
