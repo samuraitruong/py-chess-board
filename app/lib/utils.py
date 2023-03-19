@@ -1,6 +1,8 @@
 """Share util functions"""
 from io import BytesIO
 from flask import send_file
+from app.lib.theme.default_theme import DefaultTheme
+from app.lib.theme.green_theme import GreenTheme
 
 def serve_pil_image(pil_img, size=1000):
     """Response the image to request client"""
@@ -19,3 +21,11 @@ def get_previous_move(fen):
     """
     meme = fen.split(' ')
     print(meme)
+
+
+def get_theme(name):
+    """Get themes from a given name"""
+    if name == 'green':
+        return GreenTheme()
+
+    return DefaultTheme()

@@ -13,9 +13,10 @@ class Theme: # pylint: disable=too-few-public-methods
             "regular": ImageFont.truetype("app/fonts/arial/arial.ttf", 18)
         }
 
-    def get_symbol_image(self, symbol, size=(85, 85)):
+    def get_symbol_image(self, piece_name, size=(85, 85)):
         """Get the image"""
-        image_name = symbol
+
+        image_name = piece_name
         if image_name.lower() == image_name:
             image_name = 'b'+image_name
         else:

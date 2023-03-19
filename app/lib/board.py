@@ -1,13 +1,13 @@
 """Chess board"""
 from PIL import Image, ImageDraw
-from app.lib.theme.default_theme import DefaultTheme
+from app.lib.utils import get_theme
 
 class Board:
     """Chess board"""
-    def __init__(self, fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'):
+    def __init__(self, fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR', theme="default"):
         self.size = (850, 850)
         self.board = None
-        self.theme = DefaultTheme()
+        self.theme = get_theme(theme)
         self.frame_size = 25
         self.fen = fen or 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
 

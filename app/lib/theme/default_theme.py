@@ -5,7 +5,7 @@ from app.lib.theme.base_theme import Theme
 class DefaultTheme(Theme): # pylint: disable=too-few-public-methods
     """Provides default look and feels"""
     def __init__(self, piece_set = 'chessmonk'):
-        """constructor"""
+        """set default look and feel"""
         super().__init__(piece_set)
         self.white_color = '#eeeee4'
         self.black_color = '#e9873a'

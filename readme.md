@@ -4,7 +4,7 @@ python3 -m venv .venv
  . .venv/bin/activate
  ./start.sh
 ```
-The live demo deployed on : https://chess-board.fly.dev
+The live demo deployed on: https://chess-board.fly.dev
 ## Lint code before commit
 ```
 
@@ -16,13 +16,17 @@ pylint $(git ls-files '*.py')
 
 ```
 
-http://localhost:8888/?fen=4k3/8/8/8/8/8/4P3/4K3%20w%20-%20-%205%2039
+http://localhost:8080/?fen=4k3/8/8/8/8/8/4P3/4K3%20w%20-%20-%205%2039
 
 or
 
-http://localhost:8888/?fen=1b1q1Bn1/2pPrN1b/4Qp2/P1k5/1p1N1Rn1/1P1p4/1R1P4/4K2B
+http://localhost:8080/?fen=1b1q1Bn1/2pPrN1b/4Qp2/P1k5/1p1N1Rn1/1P1p4/1R1P4/4K2B
 ```
 
+Custom theme:
+```
+http://localhost:8080/?fen=8/4Kn2/1p1P2p1/Q1B2kp1/1P1r4/3P1N1P/4N1n1/1B2b3&piece=chessmonk&theme=green
+```
 
 ## Piece set
 
