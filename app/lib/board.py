@@ -72,11 +72,20 @@ class Board:
         """ Draw the number and column name on edge of board"""
         drawer = ImageDraw.Draw(self.board )
         for i in range(1,9):
-            drawer.text(( i * 100-23,  827), chr(i + 96),
+            width, height = drawer.textsize(chr(i + 96),
+                                            font= self.theme.font.get('regular')
+                                        )
+
+            drawer.text(( self.frame_size +i * 100-(50-width/2),  827), chr(i + 96),
                         fill= self.theme.frame_text_color,
                         font= self.theme.font.get('regular')
                     )
-            drawer.text(( 10,  870 - i * 100), str(i),
+
+            width, height = drawer.textsize(str(i),
+                                            font= self.theme.font.get('regular')
+                                        )
+
+            drawer.text(( 10,  800 + 2 * self.frame_size - i * 100 + height), str(i),
                         fill= self.theme.frame_text_color,
                         font= self.theme.font.get('regular')
                     )
