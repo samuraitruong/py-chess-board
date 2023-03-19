@@ -9,8 +9,8 @@ class Theme: # pylint: disable=too-few-public-methods
         self.piece_set = piece_set
 
         self.font = {
-            "large" : ImageFont.truetype("Arial", 24),
-            "regular": ImageFont.truetype("Arial", 18)
+            "large" : ImageFont.truetype("app/fonts/arial/arial.ttf", 24),
+            "regular": ImageFont.truetype("app/fonts/arial/arial.ttf", 18)
         }
 
     def get_symbol_image(self, symbol, size=(85, 85)):
@@ -32,7 +32,7 @@ class Theme: # pylint: disable=too-few-public-methods
 
         if os.path.exists(svg_file):
 
-            svg2png(url = svg_file, write_to=svg_file + ".png")
+            svg2png(url = svg_file, write_to=svg_file + ".png", output_width = 512, output_height = 512)
             file_name = svg_file + ".png"
 
         if os.path.exists(file_name):

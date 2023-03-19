@@ -1,6 +1,6 @@
 """Chess board"""
 from PIL import Image, ImageDraw
-from app.lib.theme import DefaultTheme
+from app.lib.theme.default_theme import DefaultTheme
 
 class Board:
     """Chess board"""

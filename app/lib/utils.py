@@ -12,3 +12,10 @@ def serve_pil_image(pil_img, size=1000):
     final_img.save(img_io, 'PNG', quality=100)
     img_io.seek(0)
     return send_file(img_io, mimetype='image/png')
+
+def get_previous_move(fen):
+    """
+        Return previous move from fen string
+    """
+    meme = fen.split(' ')
+    print(meme)

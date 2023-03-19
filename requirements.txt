@@ -2,3 +2,4 @@ Pillow
 Flask
 pylint
 cairosvg
+waitress

@@ -1,5 +1,5 @@
 """Default theme"""
-from app.lib.base_theme import Theme
+from app.lib.theme.base_theme import Theme
 
 
 class DefaultTheme(Theme): # pylint: disable=too-few-public-methods
