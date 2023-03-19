@@ -7,15 +7,15 @@ from app.lib.utils import serve_pil_image
 api = Flask(__name__)
 
 @api.after_request
-def add_header(r):
+def add_header(response):
     """
     Add no-cache header to response headers
     """
-    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    r.headers["Pragma"] = "no-cache"
-    r.headers["Expires"] = "0"
-    r.headers['Cache-Control'] = 'public, max-age=0'
-    return r
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    response.headers['Cache-Control'] = 'public, max-age=0'
+    return response
 
 @api.route("/")
 def generate_chess_from_fen():
