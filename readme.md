@@ -136,16 +136,16 @@ http://localhost:8080/?fen=8/4Kn2/1p1P2p1/Q1B2kp1/1P1r4/3P1N1P/4N1n1/1B2b3&piece
 ## Theme
 
 ### Default Theme -https://chess-board.fly.dev?theme=default
-![Default](https://chess-board.fly.dev "default)
+![Default](https://chess-board.fly.dev "default")
 
 
 ### Green Theme - https://chess-board.fly.dev?theme=green
-![Default](https://chess-board.fly.dev?theme=green "default)
+![Default](https://chess-board.fly.dev?theme=green "default")
 
 
 
 ### Black and White - https://chess-board.fly.dev?theme=bw
-![BW](https://chess-board.fly.dev?theme=bw "default)
+![BW](https://chess-board.fly.dev?theme=bw "default")
 
 
 ## Credit
