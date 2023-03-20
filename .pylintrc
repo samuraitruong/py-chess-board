@@ -1,5 +1,5 @@
 [MESSAGES CONTROL]
-disable=duplicate-code,too-many-locals,too-many-statements,too-many-branches
+disable=duplicate-code,too-many-locals,too-many-statements,too-many-branches,too-many-return-statements
 
 
 [FORMAT]
