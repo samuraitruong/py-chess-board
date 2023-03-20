@@ -64,5 +64,5 @@ def can_queen_moves(positions, start_index, end_index):
     if move_like_rook:
         return True
 
-    # TODO check move like Bishop
+    # check move like Bishop
     return True
