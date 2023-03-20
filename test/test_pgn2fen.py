@@ -1,8 +1,10 @@
 
-from app.lib.board import Board
+"""Test module"""
 import json
+from app.lib.board import Board
 
 def test_get_index_of_square_1(snapshot):
+    """Test get_index_of_square"""
     board = Board()
     pgn = """
     1. e4 Nc6 2. d4 e6 3. Nf3 d5 4. e5 b6 5. Bb5 Bd7 6. Bg5 Qc8 7. Bxc6 Bxc6 8. O-O
