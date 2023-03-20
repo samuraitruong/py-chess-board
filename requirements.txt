@@ -3,3 +3,4 @@ Flask
 pylint
 cairosvg
 waitress
+pytest

@@ -1,6 +1,6 @@
 """Chess board"""
 from PIL import Image, ImageDraw
-from app.lib.utils import get_theme
+from app.lib.utils import get_index_of_square, get_theme, piece_position_to_fen
 
 class Board:
     """Chess board"""
@@ -48,7 +48,7 @@ class Board:
         x_coord = col * square_size + self.frame_size
 
         shape = [(x_coord, y_coord), (x_coord+square_size, y_coord+square_size)]
-        # cell_index = index + 1
+        cell_index = index + 1
         # if cell_index in [2,4,6,8,64, 62, 60, 58]:
         color = self.theme.black_color
         if (row %2 ==0 and col %2 == 1) or (row %2 ==1 and col %2 == 0):
@@ -73,6 +73,11 @@ class Board:
                         font= self.theme.font.get('large')
                     )
 
+        drawer.text((x_coord+80, y_coord+ 10),
+                        str(cell_index),
+                        fill='red',
+                        font= self.theme.font.get('regular')
+                    )
 
     def draw_frame(self):
         """ Draw the number and column name on edge of board"""
@@ -107,3 +112,228 @@ class Board:
             outline= self.theme.border_outline_color,
             width=2
             )
+
+    def pgn2fen(self, pgn):
+        """
+        Generate array of game FENs from pgn moves
+        This function is very messy but get it working first then we optimise it later
+
+        """
+        default_fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'.split('/')
+        piece_position  = [''] *64
+        default_fen.reverse()
+        game_fens = ['rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR']
+        index=0
+        for row_fen in default_fen:
+            for piece in row_fen:
+                if piece.isnumeric():
+                    for _ in range(0, int(piece)):
+                        piece_position[index] = ''
+                        index +=1
+                else:
+                    piece_position[index] = piece
+                    index += 1
+
+        # loop throught the PGN step and generate all the FEN
+        pgn_moves = [move for move in pgn.split(' ') if "." not in move and len(move) > 0 and move not in ['1-0', '0-1', '1/2-1-2']]
+        board_cols = ['a','b','c','d','e','f','g','h']
+        for move_index, raw_move in enumerate(pgn_moves):
+            print('notation', raw_move)
+            move = raw_move.replace('+','')
+            move_piece = move[0]
+            original_move_piece =  move[0]
+            move_square = move[-2:]
+            is_captured_move = "x" in raw_move
+            is_checked_move = '+' in raw_move
+            is_checkmate = '#' in raw_move
+
+            # print(is_captured_move)
+
+            player = 'w'
+
+            if(move_index %2 ==1):
+                player = 'b'
+
+            # check for special moves ie castling o o o and o-o
+            if move == "O-O" or move == 'O-O':
+                print('castleing move')
+                if(player == 'w'):
+                    piece_position[5] = 'R'
+                    piece_position[6] = 'K'
+                    piece_position[4] = ''
+                    piece_position[7] = ''
+                if(player == 'b'):
+                    piece_position[63] = 'r'
+                    piece_position[62] = 'k'
+                    piece_position[60] = ''
+
+                continue
+
+            if move == "O-O-O" or move == 'o-o-o':
+                print('castleing move queen side')
+                if(player == 'w'):
+                    piece_position[3] = 'R'
+                    piece_position[2] = 'K'
+                    piece_position[4] = ''
+                    piece_position[0] = ''
+                if(player == 'b'):
+                    piece_position[59] = 'r'
+                    piece_position[58] = 'k'
+                    piece_position[56] = ''
+                    piece_position[60] = ''
+                game_fens.append(piece_position_to_fen(piece_position))
+                continue
+
+
+            # check for special move promotion to new piece
+            if '=' in raw_move:
+                # promotion to the queen/or any piece
+                parsed = raw_move.split('=')
+                promoted_piece =  parsed[1]
+                pawn_cell = parsed[0]
+                index = get_index_of_square(pawn_cell)
+                if player == 'w':
+                    piece_position[index] = promoted_piece.upper()
+                    piece_position[index-8] = '' # reset previou paw
+                    # need to handle capture and promotion to new piece
+
+                if player == 'b':
+                    piece_position[index] = promoted_piece.lower()
+                    piece_position[index+8] = '' # reset previou paw
+
+                game_fens.append(piece_position_to_fen(piece_position))
+
+                continue
+
+
+            if (len(move) == 2 and player =='w') or move_piece == 'x' or move_piece in board_cols:
+                move_piece = 'P'
+
+            if (len(move) == 2 and player == 'b') or move_piece == 'x' or move_piece in board_cols:
+                move_piece = 'p'
+
+            if(move_index % 2 == 1):
+                move_piece = move_piece.lower()
+
+            index = get_index_of_square(move_square)
+            print(move_index,move, '->', player, move_piece, move_square, index)
+
+            # #white pawn move
+            if move_piece == 'P':
+                if is_captured_move:
+                    possible_indexes =[ index - 7, index-9]
+                    # handel pawn move capture such as fxd4 -> the pawn on f col capture d4
+                    if original_move_piece in board_cols:
+                        current_col = move_square[1]
+                        if current_col < original_move_piece:
+                             possible_indexes = [index-7]
+                        else:
+                            possible_indexes = [index-9]
+                    print('possible pawn index', possible_indexes)
+                    possible_indexes =  [ move for move in  possible_indexes if piece_position[move] == move_piece]
+                    if(len(possible_indexes) > 0):
+                        piece_position[possible_indexes[0]] = ''
+                else:
+                    possible_index_1 = index -8
+                    possible_index_2 = index - 16
+
+                    if possible_index_1> 0 and piece_position[possible_index_1] == 'P':
+                        piece_position[possible_index_1] = ''
+                    # need check first move
+                    if possible_index_2> 0 and piece_position[possible_index_2] == 'P':
+                        piece_position[possible_index_2]=''
+            # Black pawn moves
+            if move_piece == 'p':
+
+                if is_captured_move:
+                    possible_indexes =[ index +7, index+9]
+                    if original_move_piece in board_cols:
+                        current_col = move_square[1]
+                        print('pawn capture', current_col, )
+                        if current_col < original_move_piece:
+                             possible_indexes = [index+9]
+                        else:
+                            possible_indexes = [index + 7]
+
+                    possible_indexes =  [ move for move in  possible_indexes if piece_position[move] == move_piece]
+                    if(len(possible_indexes) > 0):
+                        piece_position[possible_indexes[0]] = ''
+                else:
+                    possible_index_1 = index +8
+                    possible_index_2 = index + 16
+
+                    if possible_index_1> 0 and piece_position[possible_index_1] == 'p':
+                        piece_position[possible_index_1]=''
+                    # need check first move
+                    if possible_index_2> 0 and piece_position[possible_index_2] == 'p':
+                        piece_position[possible_index_2]=''
+
+            ## Knight move
+            if move_piece == 'N' or move_piece == 'n':
+                # possible_indexes = [index +15, index +17, index +6, index -10, index - 17, index -15, index -6]
+                possible_indexes =   [i for i, x in enumerate(piece_position) if x == move_piece]
+                possible_indexes =  [ move for move in  possible_indexes if move >=0 and piece_position[move] == move_piece]
+                possible_indexes = list(set(possible_indexes))
+                # print('possible_indexes', move_index, possible_indexes)
+                if(len(possible_indexes) > 0):
+                    piece_position[possible_indexes[0]]=''
+
+            # Bishop move
+
+            if move_piece == 'B' or move_piece == 'b':
+                possible_indexes = []
+                for i in range(0,8):
+                    possible_indexes.append(index + i *9)
+                    possible_indexes.append(index - i *9)
+                    possible_indexes.append(index + i *7)
+                    possible_indexes.append(index - i *7)
+
+                possible_indexes =  [ move for move in  possible_indexes if move != index and move >=0 and move < 64 and piece_position[move] == move_piece]
+                possible_indexes = list(set(possible_indexes))
+                print ('possible_indexes', possible_indexes)
+                if(len(possible_indexes) > 0):
+                    piece_position[possible_indexes[0]] = ''
+
+            # Rook Moves
+            if move_piece == 'R' or move_piece == 'r':
+                # root need to be same row or same column, check if any block between them
+                possible_indexes =    [i for i, x in enumerate(piece_position) if x == move_piece]
+                # for i in range(1, 8):
+                #     possible_indexes.append(index + i)
+                #     possible_indexes.append(index - i)
+                #     possible_indexes.append(index + i * 8)
+                #     possible_indexes.append(index - i * 8 )
+                # TODO: handle multiple possible rook moves, in this case using notation start column.
+                possible_indexes = [ move for move in  list(set(possible_indexes)) if move >=0 and move <=63 and piece_position[move] == move_piece ]
+                print('Root possible indx', possible_indexes)
+                if(len(possible_indexes) > 0):
+                    piece_position[possible_indexes[0]] = ''
+
+            # King or Queen move
+            if move_piece == 'Q' or move_piece == 'q' or move_piece == 'K' or move_piece == 'k':
+                q_index = piece_position.index(move_piece)
+                print ('possible_indexes', possible_indexes)
+                if(q_index > 0):
+                    piece_position[q_index] = ''
+
+            piece_position[index] = move_piece
+
+            final_fen = piece_position_to_fen(piece_position)
+            game_fens.append(final_fen)
+            if is_checkmate:
+                # if find the check mate, break the loop
+                break
+
+        return game_fens
+
+
+    def generate_images(self, pgn):
+        fens = self.pgn2fen(pgn)
+        images = []
+        for fen in fens:
+            self.fen = fen
+            move_image = self.generate()
+            images.append(move_image)
+
+        return images
+

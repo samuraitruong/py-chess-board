@@ -2,7 +2,7 @@
 # from waitress import serve
 from flask import Flask, request
 from app.lib.board import Board
-from app.lib.utils import serve_pil_image
+from app.lib.utils import serve_as_gif, serve_pil_image
 
 api = Flask(__name__)
 
@@ -27,6 +27,18 @@ def generate_chess_from_fen():
     if request.args.get('piece'):
         board.theme.set_piece_set(request.args.get('piece'))
     return serve_pil_image(board.generate(), size)
+
+@api.route("/gif")
+def generate_gift_from_pgn():
+    """Generate gift from pgn """
+    pgn = request.args.get('pgn')
+    theme = request.args.get('theme')
+    duration = int(request.args.get('duration', "1000"))
+    # size = int(request.args.get('size', "400"))
+    board = Board( theme = theme )
+
+    images =  board.generate_images(pgn)
+    return serve_as_gif(images, duration)
 
 
 #if __name__ == '__main__':# and os.environ.get('PYTHON_ENV') == 'production':

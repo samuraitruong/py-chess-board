@@ -9,6 +9,7 @@ class Theme: # pylint: disable=too-few-public-methods
         self.piece_set = piece_set
         self.square_border_width = 0
         self.square_border_color = None
+        self.last_move_square_color = 'red'
         self.font = {
             "large" : ImageFont.truetype("app/fonts/arial/arial.ttf", 24),
             "regular": ImageFont.truetype("app/fonts/arial/arial.ttf", 18)
