@@ -2,6 +2,11 @@
 from app.lib.utils import reverse_index_to_square
 
 
+def can_bishop_moves(positions, start_index, end_index):
+    """Validate bishop move from 2 index positions"""
+    print(positions, start_index, end_index)
+    return True
+
 def can_root_moves(positions, start_index, end_index):
     """Validate if root can move
         Check if the rook can move between 2 squares

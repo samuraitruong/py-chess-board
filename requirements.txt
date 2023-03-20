@@ -4,3 +4,4 @@ pylint
 cairosvg
 waitress
 pytest
+pytest-snapshot

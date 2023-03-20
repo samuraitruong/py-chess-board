@@ -123,12 +123,14 @@ class Board:
             width=2
             )
 
-    def pgn2fen(self, pgn):
+    def pgn2fen(self, raw_pgn):
         """
         Generate array of game FENs from pgn moves
         This function is very messy but get it working first then we optimise it later
 
         """
+        pgn = raw_pgn.replace('\n', ' ').replace('\r', ' ')
+        print(pgn)
         default_fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'.split('/')
         piece_position  = [''] *64
         default_fen.reverse()
@@ -153,7 +155,7 @@ class Board:
         board_cols = ['a','b','c','d','e','f','g','h']
         for move_index, raw_move in enumerate(pgn_moves):
             print('notation', raw_move)
-            move = raw_move.replace('+','')
+            move = raw_move.replace('+','').replace('#','')
             move_piece = move[0]
             original_move_piece =  move[0]
             move_square = move[-2:]
@@ -206,9 +208,8 @@ class Board:
             if '=' in raw_move:
                 # promotion to the queen/or any piece
                 parsed = raw_move.split('=')
-                promoted_piece =  parsed[1]
+                promoted_piece =  parsed[1].replace('+', '').replace('#', '')
                 pawn_cell = parsed[0]
-                print(pawn_cell)
                 index = get_index_of_square(pawn_cell)
                 captured_and_promote = 'x' in raw_move
 
@@ -221,13 +222,14 @@ class Board:
                         index = get_index_of_square(pawn_cell[-2:])
                         # raise Exception('stop')
                     else:
-                        piece_position[index-8] = '' # reset previou paw
+                        piece_position[index - 8] = '' # reset previou paw
 
                     piece_position[index] = promoted_piece.upper()
                     # need to handle capture and promotion to new piece
 
                 if player == 'b':
                     print('black promotion come here')
+                    print('index', index)
                     piece_position[index] = promoted_piece.lower()
                     piece_position[index + 8] = '' # reset previous pawn
 
@@ -360,7 +362,7 @@ class Board:
                 if len(possible_indexes) > 0:
                     piece_position[possible_indexes[0]] = ''
 
-            # King or Queen move
+            # King
             if move_piece in ['K', 'k']:
                 king_index = piece_position.index(move_piece)
                 # print ('Queen move - possible_indexes', possible_indexes)
