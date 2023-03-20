@@ -1,6 +1,6 @@
 """Chess board"""
 from PIL import Image, ImageDraw
-from app.lib.move_utils import can_queen_moves, can_root_moves
+from app.lib.move_utils import can_knight_move, can_queen_moves, can_root_moves
 from app.lib.utils import (
         friendly_print_move,
         get_index_of_square,
@@ -83,11 +83,11 @@ class Board:
                         font= self.theme.font.get('large')
                     )
 
-        # drawer.text((x_coord+80, y_coord+ 10),
-        #                 str(cell_index),
-        #                 fill='#333',
-        #                 font= self.theme.font.get('regular')
-        #             )
+        drawer.text((x_coord+75, y_coord+ 5),
+                        str(cell_index-1),
+                        fill='red',
+                        font= self.theme.font.get('regular')
+                    )
 
     def draw_frame(self):
         """ Draw the number and column name on edge of board"""
@@ -130,9 +130,8 @@ class Board:
 
         """
         pgn = raw_pgn.replace('\n', ' ').replace('\r', ' ')
-        print(pgn)
         default_fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'.split('/')
-        piece_position  = [''] *64
+        piece_position  = [''] * 64
         default_fen.reverse()
         game_fens = [('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR', None)]
         index=0
@@ -214,10 +213,10 @@ class Board:
                 captured_and_promote = 'x' in raw_move
 
                 if player == 'w':
-                    print('promotion error', index, pawn_cell, raw_move)
                     if captured_and_promote:
-                        from_pawn_cell = ord(raw_move[0])- 97 + 8*7
-                        print(from_pawn_cell, raw_move[0])
+                        # need to check the pawn capture move again
+                        from_pawn_cell = ord(raw_move[0])- 97 + 8*6
+                        print("captured_and_promote", raw_move, from_pawn_cell, raw_move[0])
                         piece_position[from_pawn_cell] = ''
                         index = get_index_of_square(pawn_cell[-2:])
                         # raise Exception('stop')
@@ -273,20 +272,31 @@ class Board:
             if move_piece == 'P':
                 if is_captured_move:
                     possible_indexes =[ index - 7, index-9]
-                    # handel pawn move capture such as fxd4 -> the pawn on f col capture d4
-                    if original_move_piece in board_cols:
-                        current_col = move_square[1]
-                        if current_col < original_move_piece:
-                            possible_indexes = [index-9]
-                        else:
-                            possible_indexes = [index-7]
+                    print('pawn captured move')
+                    # check  if the move is en passant move
 
-                    # print('possible pawn index', possible_indexes)
+                    # handel pawn move capture such as fxd4 -> the pawn on f col capture d4
+
+                    if original_move_piece in board_cols:
+                        current_col = move_square[0]
+                        target_index = get_index_of_square(move_square)
+                        print("target_indexss", move_square, target_index, current_col, original_move_piece)
+                        if piece_position[target_index] =='':
+                            print('en passant move', move_square ,index)
+                            piece_position[index - 8] = ''
+                        else:
+                            if current_col < original_move_piece:
+                                possible_indexes = [index-7]
+                            else:
+                                possible_indexes = [index-9]
+
+                    print('possible pawn index', possible_indexes)
                     possible_indexes =  [ move for move in  possible_indexes if piece_position[move] == move_piece]
+                    friendly_print_move(move_piece, possible_indexes)
                     if len(possible_indexes) > 0:
                         piece_position[possible_indexes[0]] = ''
                 else:
-                    possible_index_1 = index -8
+                    possible_index_1 = index - 8
                     possible_index_2 = index - 16
 
                     if possible_index_1> 0 and piece_position[possible_index_1] == 'P':
@@ -300,7 +310,7 @@ class Board:
                 if is_captured_move:
                     possible_indexes =[ index +7, index+9]
                     if original_move_piece in board_cols:
-                        current_col = move_square[1]
+                        current_col = move_square[0]
                         # print('pawn capture', current_col, )
                         if current_col < original_move_piece:
                             possible_indexes = [index+9]
@@ -322,16 +332,15 @@ class Board:
 
             ## Knight move
             if move_piece in ['N' ,'n']:
-                # possible_indexes = [index +15, index +17, index +6, index -10, index - 17, index -15, index -6]
                 possible_indexes =  [i for i, x in enumerate(piece_position)
                                      if x == move_piece]
 
                 possible_indexes =  [ move for move in  possible_indexes
-                                    if move >=0 and piece_position[move] == move_piece]
-                possible_indexes = list(set(possible_indexes))
+                                    if can_knight_move(move, index)]
+                # possible_indexes = list(set(possible_indexes))
                 # print('possible_indexes', move_index, possible_indexes)
                 if len(possible_indexes) > 0:
-                    piece_position[possible_indexes[0]]=''
+                    piece_position[possible_indexes[0]]= ''
 
             # Bishop move
 

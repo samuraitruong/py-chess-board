@@ -71,3 +71,22 @@ def can_queen_moves(positions, start_index, end_index):
 
     # check move like Bishop
     return True
+
+def can_knight_move( start_index, end_index,):
+    """Validate if knight can move"""
+    start_square = reverse_index_to_square(start_index)
+    end_square = reverse_index_to_square(end_index)
+
+    diff_row = abs(ord(start_square[0]) - ord(end_square[0]))
+
+    diff_col = abs(int(start_square[1]) - int(end_square[1]))
+
+    print('************ **** knight move check', start_square, end_square, diff_row, diff_col)
+    if diff_row ==1 and diff_col ==2:
+        return True
+
+    if diff_row ==2 and diff_col ==1:
+        return True
+
+    # check move like Bishop
+    return False
