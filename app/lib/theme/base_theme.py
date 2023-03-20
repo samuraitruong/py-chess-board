@@ -3,6 +3,8 @@ import os
 from cairosvg import svg2png
 from PIL import Image, ImageFont
 
+cache = {} # maybe use lru_cache but now keep it simple
+
 class Theme: # pylint: disable=too-few-public-methods
     """Theme base"""
     def __init__(self, piece_set):
@@ -28,10 +30,20 @@ class Theme: # pylint: disable=too-few-public-methods
         svg_file = f'app/pieces/{self.piece_set}/{image_name.lower()}.svg'
 
         svg_png_file = f'app/pieces/{self.piece_set}/{image_name.lower()}.svg.png'
-        # skip convert if the file already converted
+
+        cache_key = svg_file + str(size)
+
+        cache_image = cache.get(cache_key)
+
+        if cache_image:
+            return cache_image
+
+                # skip convert if the file already converted
         if os.path.exists(svg_png_file):
             piece_image= Image.open(svg_png_file)
-            return piece_image.resize(size)
+            cache_image =  piece_image.resize(size)
+            cache[cache_key] = cache_image
+            return cache_image
 
         if os.path.exists(svg_file):
 
@@ -44,7 +56,9 @@ class Theme: # pylint: disable=too-few-public-methods
 
         if os.path.exists(file_name):
             piece_image= Image.open(file_name)
-            return piece_image.resize(size)
+            cache_image =  piece_image.resize(size)
+            cache[cache_key] = cache_image
+            return cache_image
 
         return None
 

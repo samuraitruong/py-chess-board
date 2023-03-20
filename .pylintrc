@@ -1,2 +1,6 @@
 [MESSAGES CONTROL]
-disable=duplicate-code
+disable=duplicate-code,too-many-locals,too-many-statements,too-many-branches
+
+
+[FORMAT]
+max-line-length=120

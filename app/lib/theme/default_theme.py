@@ -12,3 +12,4 @@ class DefaultTheme(Theme): # pylint: disable=too-few-public-methods
         self.base_color = '#4e2b14'
         self.frame_text_color = '#fff'
         self.border_outline_color = '#5e483e'
+        self.last_move_square_color = '#ed2d18'

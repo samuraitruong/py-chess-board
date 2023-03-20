@@ -37,7 +37,7 @@ def generate_gift_from_pgn():
     # size = int(request.args.get('size', "400"))
     board = Board( theme = theme )
 
-    images =  board.generate_images(pgn)
+    images =  board.generate_gif_from_pgn(pgn)
     return serve_as_gif(images, duration)
 
 
