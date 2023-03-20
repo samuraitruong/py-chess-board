@@ -83,11 +83,11 @@ class Board:
                         font= self.theme.font.get('large')
                     )
 
-        drawer.text((x_coord+80, y_coord+ 10),
-                        str(cell_index),
-                        fill='red',
-                        font= self.theme.font.get('regular')
-                    )
+        # drawer.text((x_coord+80, y_coord+ 10),
+        #                 str(cell_index),
+        #                 fill='#333',
+        #                 font= self.theme.font.get('regular')
+        #             )
 
     def draw_frame(self):
         """ Draw the number and column name on edge of board"""
