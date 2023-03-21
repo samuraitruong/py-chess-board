@@ -1,6 +1,12 @@
 """Chess board"""
 from PIL import Image, ImageDraw
-from app.lib.move_utils import can_knight_move, can_queen_moves, can_root_moves
+from app.lib.move_utils import (
+    can_knight_move,
+    can_queen_moves,
+    can_root_moves,
+    can_bishop_moves
+)
+# import chess.pgn
 from app.lib.utils import (
         friendly_print_move,
         get_index_of_square,
@@ -17,14 +23,16 @@ class Board:
         self.frame_size = 25
         self.fen = fen or 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
 
-    def generate(self, hightlight_square = None):
+    def generate(self, hightlight_square = None, view_as = 'w'):
         """Generate image"""
         self.board = Image.new('RGB', size=self.size, color= self.theme.base_color)
         for i in range(0,64):
             hightlighted = hightlight_square and get_index_of_square(hightlight_square) == i
-            self.draw_square(i, hightlighted)
+            self.draw_square(i, hightlighted, view_as)
 
         self.draw_frame()
+        if view_as in ['b', 'black']:
+            return self.board.rotate(180)
 
         return self.board
 
@@ -42,7 +50,7 @@ class Board:
         # print(fen.split('/')[row-1], row, col, list[col-1], list)
         return pieces[col]
 
-    def draw_square(self,  index, hightlight = False):
+    def draw_square(self,  index, hightlight = False, view_as = 'w'):
         """Draw a specific square"""
         square = ImageDraw.Draw(self.board )
         square_size = 100
@@ -62,7 +70,7 @@ class Board:
             color = self.theme.white_color
 
         if hightlight:
-            color = self.theme.last_move_square_color
+            color = self.theme.active_square_color
 
         square.rectangle(shape,
                          fill = color,
@@ -75,6 +83,9 @@ class Board:
         piece_image = self.theme.get_symbol_image(piece)
         if piece_image:
             padding = int((square_size - piece_image.width) /2)
+            if view_as in ['b', 'black']:
+                piece_image = piece_image.rotate(180)
+
             self.board.paste(piece_image, (x_coord+padding, y_coord+padding), mask=piece_image)
         else:
             drawer.text((x_coord+50, y_coord+ 50),
@@ -248,15 +259,14 @@ class Board:
             #
             if len(raw_move) == 4 and raw_move[1] in board_cols:
                 #   find index of special move
-                print('specific move of ', raw_move)
                 for i in range(1,9):
                     cell =   raw_move[1] + str(i )
 
                     cell_index = get_index_of_square(cell)
-                    print(cell_index, cell)
+                    # print(cell_index, cell)
                     if piece_position[cell_index] == move_piece:
                         implicit_move_index = cell_index
-                        print('specific move of ', raw_move, implicit_move_index)
+                        print('Implicit square move ', raw_move, implicit_move_index)
 
             index = get_index_of_square(move_square)
             print(move_index,move, '->', player, move_piece, move_square, index)
@@ -267,6 +277,8 @@ class Board:
                 piece_position[implicit_move_index] = ''
                 game_fens.append((piece_position_to_fen(piece_position), move_square))
                 continue
+
+            possible_indexes =    [i for i, x in enumerate(piece_position) if x == move_piece]
 
             # #white pawn move
             if move_piece == 'P':
@@ -290,7 +302,7 @@ class Board:
                             else:
                                 possible_indexes = [index-9]
 
-                    print('possible pawn index', possible_indexes)
+                    # print('possible pawn index', possible_indexes)
                     possible_indexes =  [ move for move in  possible_indexes if piece_position[move] == move_piece]
                     friendly_print_move(move_piece, possible_indexes)
                     if len(possible_indexes) > 0:
@@ -332,8 +344,8 @@ class Board:
 
             ## Knight move
             if move_piece in ['N' ,'n']:
-                possible_indexes =  [i for i, x in enumerate(piece_position)
-                                     if x == move_piece]
+                # possible_indexes =  [i for i, x in enumerate(piece_position)
+                #                      if x == move_piece]
 
                 possible_indexes =  [ move for move in  possible_indexes
                                     if can_knight_move(move, index)]
@@ -345,27 +357,14 @@ class Board:
             # Bishop move
 
             if move_piece in ['B', 'b']:
-                possible_indexes = []
-                for i in range(0,8):
-                    possible_indexes.append(index + i *9)
-                    possible_indexes.append(index - i *9)
-                    possible_indexes.append(index + i *7)
-                    possible_indexes.append(index - i *7)
-
-                possible_indexes =  [ move for move in  possible_indexes if move != index
-                                     and 0<= move < 64
-                                     and piece_position[move] == move_piece]
-                possible_indexes = list(set(possible_indexes))
+                possible_indexes =  [ move for move in  possible_indexes
+                                    if can_bishop_moves(piece_position, move, index)]
                 # print ('possible_indexes', possible_indexes)
                 if len(possible_indexes) > 0:
                     piece_position[possible_indexes[0]] = ''
 
             # Rook Moves
             if move_piece  in ['R', 'r']:
-
-                # root need to be same row or same column, check if any block between them
-                possible_indexes =    [i for i, x in enumerate(piece_position) if x == move_piece]
-
                 possible_indexes = [ move for move in possible_indexes if can_root_moves(piece_position, move, index)]
                 friendly_print_move(move_piece, possible_indexes)
                 if len(possible_indexes) > 0:
@@ -381,7 +380,7 @@ class Board:
 
             if move_piece  in ['Q', 'q']:
 
-                possible_indexes =    [i for i, x in enumerate(piece_position) if x == move_piece]
+                # possible_indexes =    [i for i, x in enumerate(piece_position) if x == move_piece]
                 possible_indexes = [ move for move in possible_indexes if can_queen_moves(piece_position, move, index)]
                 friendly_print_move(move_piece, possible_indexes)
                 if len(possible_indexes) >= 1:
@@ -400,10 +399,21 @@ class Board:
 
         return game_fens
 
+    # def get_fens_from_pgn(self, raw_pgn):
+    #     pgn = io.StringIO(raw_pgn)
+    #     game = chess.pgn.read_game(pgn)
+    #     board = game.board()
+    #     fens = []
+    #     for move in game.mainline_moves():
+    #         board.push(move)
+    #         fens.append((board, move))
+    #
+    #    return fens
 
     def generate_gif_from_pgn(self, pgn):
         """Generate the gif image for pgn moves"""
         fens = self.pgn2fen(pgn)
+        # fens = self.fens(pgn)
         images = []
         for game_fen in fens:
             fen, last_move_square = game_fen

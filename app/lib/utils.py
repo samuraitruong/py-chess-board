@@ -105,4 +105,4 @@ def piece_position_to_fen(piece_position):
 def friendly_print_move(piece, positions):
     """Debug print of piece"""
     moves = [(idx,reverse_index_to_square(idx) )for idx in positions]
-    print("possible move", piece, moves)
+    print("Possible move", piece, moves)

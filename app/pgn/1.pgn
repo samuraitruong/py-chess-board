@@ -1,0 +1,20 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2023.03.20"]
+[Round "?"]
+[White "samuraitruong"]
+[Black "hanidave"]
+[Result "1-0"]
+[ECO "C26"]
+[WhiteElo "841"]
+[BlackElo "853"]
+[TimeControl "600"]
+[EndTime "13:47:35 PDT"]
+[Termination "samuraitruong won by checkmate"]
+
+1. e4 e5 2. Nc3 Nf6 3. Bc4 c6 4. Nf3 d5 5. Bb3 d4 6. Na4 b5 7. Nc5 Bxc5 8. d3
+O-O 9. O-O Bg4 10. h3 Bxf3 11. Qxf3 Bd6 12. Re1 Be7 13. c3 c5 14. cxd4 cxd4 15.
+Bd2 a5 16. a4 b4 17. Qf5 g6 18. Qxe5 Nc6 19. Qg3 Bd6 20. Qf3 Ne5 21. Qd1 Nxd3
+22. Re2 Nxb2 23. Qc1 Nd3 24. Qc4 Ne5 25. Qxd4 Qe7 26. f4 Nc6 27. Qf2 Nxe4 28.
+Qb6 Rac8 29. Bd5 Bb8 30. Rae1 Qd6 31. Bxe4 g5 32. fxg5 Qh2+ 33. Kf2 Qg3+ 34. Kg1
+f5 35. Bd5+ Kg7 36. Re7+ Kg6 37. R1e6+ Kh5 38. Rh6# 1-0

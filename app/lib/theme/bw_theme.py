@@ -12,3 +12,4 @@ class BlackWhiteTheme(Theme): # pylint: disable=too-few-public-methods
         self.base_color = '#302E2B'
         self.frame_text_color = '#BEBEBE'
         self.border_outline_color = '#402E2B'
+        self.active_square_color = '#e0dfd3'
