@@ -16,12 +16,13 @@ from app.lib.utils import (
 
 class Board:
     """Chess board"""
-    def __init__(self, fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR', theme="default"):
+    def __init__(self, fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR', theme="default", debug = False):
         self.size = (850, 850)
         self.board = None
         self.theme = get_theme(theme)
         self.frame_size = 25
         self.fen = fen or 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
+        self.debug = debug
 
     def generate(self, hightlight_square = None, view_as = 'w'):
         """Generate image"""
@@ -93,12 +94,12 @@ class Board:
                         fill='red',
                         font= self.theme.font.get('large')
                     )
-
-        drawer.text((x_coord+75, y_coord+ 5),
-                        str(cell_index-1),
-                        fill='red',
-                        font= self.theme.font.get('regular')
-                    )
+        if self.debug:
+            drawer.text((x_coord+75, y_coord+ 5),
+                            str(cell_index-1),
+                            fill='red',
+                            font= self.theme.font.get('regular')
+                        )
 
     def draw_frame(self):
         """ Draw the number and column name on edge of board"""

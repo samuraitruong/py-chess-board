@@ -62,7 +62,7 @@ def generate_gift_from_pgn():
     theme = request.args.get('theme')
     duration = int(request.args.get('duration', "1000"))
     # size = int(request.args.get('size', "400"))
-    board = Board( theme = theme )
+    board = Board( theme = theme, debug=os.environ.get('DEBUG', '0') == "1" )
 
     images =  board.generate_gif_from_pgn(pgn)
     return serve_as_gif(images, duration)

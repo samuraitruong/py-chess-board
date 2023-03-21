@@ -14,6 +14,14 @@ If you prefer development with docker just simply run
 docker compose up
 
 ```
+
+To debug the board with the cell index, just need to set DEBUG=1 when run the application
+
+```sh
+DEBUG=1 ./start.sh
+
+```
+
 The live demo deployed on: https://chess-board.fly.dev
 
 For a quick test please visit http://localhost:8080/playground or https://chess-board.fly.dev/playground . it contains the a simple hml page allow change the input and see the image in live demo
