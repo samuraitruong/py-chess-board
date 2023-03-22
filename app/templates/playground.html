@@ -93,7 +93,7 @@
       }
       function setPieceSet() {
         piece_set = document.querySelector("#pieceset").value;
-        console.log("hahahah");
+        console.log("hahahah", piece_set);
         refreshBoardImage();
       }
       function setTheme(theme) {
@@ -147,15 +147,33 @@
               <a type="button" class="btn btn-success" href="" id="link" target="_blank">Open URL</a>
             </div>
           </div>
-          <label class="form-label mt-5">Click on below sample to view:</label>
-          <ul class="list-group mt-3">
+          <label class="form-label mt-5">Sample games:</label>
+
+          <select
+            id="sample-games"
+            class="form-select"
+            aria-label="Default select example"
+            onchange="setData(this.value)"
+          >
+            <option selected>Select a game</option>
             {% for member in data_sources: %}
-            <li role="button" class="list-group-item" onclick="setData('{{member}}')">
-              Sample PGN - {{loop.index}}
-              <input type="hidden" value="{{member}}" />
-            </li>
+            <option value="{{member}}">Sample PGN - {{loop.index}}</option>
             {% endfor %}
-          </ul>
+          </select>
+
+          <label class="form-label mt-5">Sample puzzle:</label>
+
+          <select
+            id="sample-puzzle"
+            class="form-select"
+            aria-label="Default select puzzle"
+            onchange="setData(this.value)"
+          >
+            <option selected>Select a game</option>
+            {% for member in fen_sources: %}
+            <option value="{{member}}">{{member}}</option>
+            {% endfor %}
+          </select>
         </div>
         <div class="col-8 wrapper">
           <span class="loader"></span>

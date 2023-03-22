@@ -29,8 +29,13 @@ def playground():
     folder = os.getcwd() + '/app/pgn'
     piece_set_folder = os.getcwd() + '/app/pieces'
 
+    onlyfiles = [f for f in os.listdir(folder) if isfile(join(folder, f)) and '.pgn'  in f]
+    onlyfiles.sort()
+    fens = []
 
-    onlyfiles = [f for f in os.listdir(folder) if isfile(join(folder, f))]
+    with open(os.getcwd() +'/app/pgn/puzzle.txt', 'r') as puzzle_file:
+        fens = puzzle_file.readlines()
+
     data_sources = []
     for file_name in onlyfiles:
         with open(join(folder, file_name), encoding="utf-8") as pgn_file:
@@ -46,7 +51,8 @@ def playground():
     return render_template('playground.html',
                            data_sources= data_sources,
                            themes = ['bw', 'orange', 'green', 'blue', 'default'],
-                           piece_sets = subfolders
+                           piece_sets = subfolders,
+                           fen_sources = fens
                            )
 
 @api.route("/")
@@ -69,7 +75,8 @@ def generate_gift_from_pgn():
     duration = int(request.args.get('duration', "1000"))
     # size = int(request.args.get('size', "400"))
     board = Board( theme = theme, debug=os.environ.get('DEBUG', '0') == "1" )
-
+    if request.args.get('piece'):
+        board.theme.set_piece_set(request.args.get('piece'))
     images =  board.generate_gif_from_pgn(pgn)
     return serve_as_gif(images, duration)
 #if __name__ == '__main__':# and os.environ.get('PYTHON_ENV') == 'production':
