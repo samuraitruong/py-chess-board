@@ -26,6 +26,9 @@ The live demo deployed on: https://chess-board.fly.dev
 
 For a quick test please visit http://localhost:8080/playground or https://chess-board.fly.dev/playground . it contains the a simple hml page allow change the input and see the image in live demo
 
+<img width="900" alt="image" src="https://user-images.githubusercontent.com/1183138/226876151-198f8614-adb9-4d18-971f-8c2b76bd47f9.png">
+
+
 ## API params
 ### Generate board image from FEN
 - **fen**: the valid FEN string of the board
