@@ -19,6 +19,7 @@ class Board:
     """Chess board"""
     def __init__(self, fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR', theme="default", debug = False):
         self.size = (850, 850)
+
         self.board = None
         self.theme = get_theme(theme)
         self.frame_size = 25
@@ -105,12 +106,20 @@ class Board:
     def draw_frame(self):
         """ Draw the number and column name on edge of board"""
         drawer = ImageDraw.Draw(self.board )
+        frame_image = Image.new('RGB', size=(850, self.frame_size), color= self.theme.base_color)
+        drawer_top = ImageDraw.Draw(frame_image)
         for i in range(1,9):
             width, height = drawer.textsize(chr(i + 96),
                                             font= self.theme.font.get('regular')
                                         )
 
-            drawer.text(( self.frame_size +i * 100-(50-width/2),  827), chr(i + 96),
+            drawer.text(( self.frame_size + i * 100 - 50 - width/2,  827), chr(i + 96),
+                        fill= self.theme.frame_text_color,
+                        font= self.theme.font.get('regular')
+                    )
+
+            drawer_top.text(( self.frame_size +i * 100 - 50- width/2,  int(self.frame_size - height)/2 -2),
+                        chr(-i +9 + 96),
                         fill= self.theme.frame_text_color,
                         font= self.theme.font.get('regular')
                     )
@@ -124,6 +133,16 @@ class Board:
                         font= self.theme.font.get('regular')
                     )
 
+            drawer.text(( 830,  800 + 2 * self.frame_size - i * 100 + height), str(i),
+                        fill= self.theme.frame_text_color,
+                        font= self.theme.font.get('regular')
+            )
+            # Draw other text
+
+
+
+        rotate_image = frame_image.rotate(180)
+        self.board.paste(rotate_image, (0,0))
         drawer.rectangle(
             (
                 self.frame_size-2,
@@ -197,6 +216,7 @@ class Board:
                     piece_position[62] = 'k'
                     piece_position[60] = ''
 
+                game_fens.append((piece_position_to_fen(piece_position), None))
                 continue
 
             if move in ["O-O-O", 'o-o-o']:
@@ -234,7 +254,7 @@ class Board:
                         index = get_index_of_square(pawn_cell[-2:])
                         # raise Exception('stop')
                     else:
-                        piece_position[index - 8] = '' # reset previou paw
+                        piece_position[index - 8] = '' # reset previous paw
 
                     piece_position[index] = promoted_piece.upper()
                     # need to handle capture and promotion to new piece
@@ -277,12 +297,9 @@ class Board:
                 print('Implicit move: ', raw_move, move, move_piece, possible_indexes)
                 for i in possible_indexes:
                     square_name = reverse_index_to_square(i)
-                    print('******** square name', square_name, raw_move)
-                    # print(cell_index, cell)
                     # check if square is same row or same column
                     if square_name[0] == raw_move[1] or square_name[0] == raw_move[1]:
                         implicit_move_index = i
-                        print('Found implicit matches ', raw_move, implicit_move_index)
 
             index = get_index_of_square(move_square)
             print(move_index,move, '->', player, move_piece, move_square, index)
@@ -303,10 +320,9 @@ class Board:
 
                     # handel pawn move capture such as fxd4 -> the pawn on f col capture d4
 
-                    if original_move_piece in board_cols:
+                    if is_captured_move:
                         current_col = move_square[0]
                         target_index = get_index_of_square(move_square)
-                        print("target_indexss", move_square, target_index, current_col, original_move_piece)
                         if piece_position[target_index] =='':
                             print('en passant move', move_square ,index)
                             piece_position[index - 8] = ''
@@ -335,7 +351,7 @@ class Board:
 
                 if is_captured_move:
                     possible_indexes =[ index +7, index+9]
-                    if original_move_piece in board_cols:
+                    if is_captured_move:
                         current_col = move_square[0]
                         # print('pawn capture', current_col, )
                         if current_col < original_move_piece:

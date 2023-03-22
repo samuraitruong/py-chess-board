@@ -4,6 +4,7 @@ import os
 import uuid
 import tempfile as tf
 from flask import send_file
+from app.lib.theme.blue_theme import BlueTheme
 from app.lib.theme.green_theme import GreenTheme
 from app.lib.theme.default_theme import DefaultTheme
 from app.lib.theme.bw_theme import BlackWhiteTheme
@@ -71,6 +72,10 @@ def get_theme(name):
 
     if name == 'orange':
         return OrangeTheme()
+
+    if name == 'blue':
+        return BlueTheme()
+
     return DefaultTheme()
 
 

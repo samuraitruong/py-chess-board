@@ -27,6 +27,9 @@ def playground():
     # return os. getcwd()
     # read all the file inside pgn and add to the list
     folder = os.getcwd() + '/app/pgn'
+    piece_set_folder = os.getcwd() + '/app/pieces'
+
+
     onlyfiles = [f for f in os.listdir(folder) if isfile(join(folder, f))]
     data_sources = []
     for file_name in onlyfiles:
@@ -37,10 +40,13 @@ def playground():
             print(index , pgn_only)
             data_sources.append(pgn_only)
     # piece_sets = []
+
+    subfolders= [f.name for f in os.scandir(piece_set_folder) if f.is_dir()]
+
     return render_template('playground.html',
                            data_sources= data_sources,
-                           themes = ['bw', 'orange', 'green', 'default'],
-                           piece_sets = []
+                           themes = ['bw', 'orange', 'green', 'blue', 'default'],
+                           piece_sets = subfolders
                            )
 
 @api.route("/")
