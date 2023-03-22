@@ -1,37 +1,101 @@
 """Move validation """
-from app.lib.utils import reverse_index_to_square
+from app.lib.utils import reverse_index_to_square, get_index_of_square
 
+def range_of(start, end, exclude_boundary=False):
+    """Create range of character from 2 char"""
+    start_i = min(ord(start),  ord(end))
+    end_i = max(ord(end), ord(start))
+    result= [chr(i) for i in range(start_i, end_i +1)]
+
+    if exclude_boundary:
+        return [x for x in result if x not in [start, end]]
+    return result
+
+def get_square_between(start_square, end_square, exclude_boundary=True):
+    """Find all the square between 2 square for a2 and a7 or b8  c8"""
+    start_col = start_square[0]
+    start_row = int(start_square[1])
+    end_col= end_square[0]
+    end_row = int(end_square[1])
+    # sample row
+    if start_row == end_row:
+        cols = range_of(start_col, end_col, exclude_boundary)
+        return [x + str(end_row) for x in cols]
+
+    #sample column
+    if start_col == end_col:
+        rows = range_of(str(start_row), str(end_row), exclude_boundary)
+        return [start_col +x for x in rows]
+
+    # check diagnal
+    return None
+
+def get_diagonal_square_between(start_square, end_square):
+    """Get diagonal square between 2 square"""
+    start_index = get_index_of_square(start_square)
+    end_index = get_index_of_square(end_square)
+    diff_row = abs(ord(start_square[0]) - ord(end_square[0]))
+    diff_col = abs(ord(start_square[1]) - ord(end_square[1]))
+
+    if diff_col != diff_row:
+        return None
+
+    # print(start_square, end_square, start_index, end_index)
+
+    diff = end_index - start_index
+    dianonal_squares = []
+    # print(diff, diff % 7 != 0, diff % 9 != 0)
+    if diff % 7 != 0 and diff %9 != 0:
+        return None
+
+    steps = 7
+
+    if diff % 9 == 0:
+        steps = 9
+
+    check_index = start_index
+
+    if start_index < end_index:
+        while check_index <  end_index:
+            check_index = check_index + steps
+            dianonal_squares.append(reverse_index_to_square(check_index))
+
+    else:
+        while check_index > end_index:
+            check_index = check_index - steps
+            dianonal_squares.append(reverse_index_to_square(check_index))
+
+    return [x for x in dianonal_squares if x not in [start_square, end_square]]
+
+def check_move_in_straight_lines(possitions, start_square, end_square):
+    """Check if the piece can move between 2 squares without any blockade"""
+    squares = get_square_between(start_square, end_square)
+
+    #  if 2 cell is not connected on the straight lines, return FALSE
+    if squares is None:
+        return False
+    print('_______________ >square_between', start_square, end_square, squares)
+    blocked_square = [x for x in squares if possitions[get_index_of_square(x)] != '' ]
+    return len(blocked_square) == 0
+
+def check_move_in_diagonal_lines(possitions, start_square, end_square):
+    """Check if the piece can move between 2 squares without any blockade"""
+    squares = get_diagonal_square_between(start_square, end_square)
+
+    #  if 2 cell is not connected on the straight lines, return FALSE
+    if squares is None:
+        return False
+    print('_______________ >diagonal line ', start_square, end_square, squares)
+    blocked_square = [x for x in squares if possitions[get_index_of_square(x)] != '' ]
+    return len(blocked_square) == 0
 
 def can_bishop_moves(positions, start_index, end_index):
     """Validate bishop move from 2 index positions"""
 
-    # print("***********bitshop check", start_index, end_index, end_index - start_index)
-    # start_square = reverse_index_to_square(start_index)
-    # end_square = reverse_index_to_square(end_index)
-    diff = end_index - start_index
-    if diff % 7!= 0 and diff %9 !=0:
-        # print('invalid bitshop move')
-        return False
+    start_square = reverse_index_to_square(start_index)
+    end_square = reverse_index_to_square(end_index)
 
-    steps = 9
-
-    if (end_index - start_index) % 7==0:
-        steps = 7
-    check_index = start_index
-    if start_index < end_index:
-
-        while check_index< end_index:
-            check_index = check_index + steps
-            if positions[check_index] != '' and check_index< end_index:
-                return False
-
-    if start_index > end_index:
-        while check_index > end_index:
-            check_index = check_index - steps
-            if positions[check_index] != '' and check_index > end_index:
-                return False
-
-    return True
+    return check_move_in_diagonal_lines(positions, start_square, end_square)
 
 def can_root_moves(positions, start_index, end_index):
     """Validate if root can move
@@ -39,67 +103,20 @@ def can_root_moves(positions, start_index, end_index):
     """
     start_square = reverse_index_to_square(start_index)
     end_square = reverse_index_to_square(end_index)
-    can_move = True
-    # print('checking rook move ', start_square, start_index, end_square, end_index)
 
-    ## Not on the same row or column , root will not able to move
-    if start_square[0] != end_square[0] and start_square[1] != end_square[1]:
-        return False
-    # same column a7 to c7 for example
-    if start_square[0] == end_square[0]:
-        # print('check the same column')
+    return check_move_in_straight_lines(positions, start_square, end_square)
 
-        # 1 steps move
-        if abs(start_index - end_index) <= 8:
-            return True
-
-        if start_index <  end_index:
-            for check_index in range(start_index+8 , end_index-8, 8):
-                # If any piece between start and end , the move is blocked
-                if positions[check_index] != '':
-                    return False
-
-        if start_index >  end_index:
-            for check_index in range(start_index-8 , end_index+ 8, 8):
-                # If any piece between start and end , the move is blocked
-                if positions[check_index] != '':
-                    return False
-
-
-
-    if start_square[1] == end_square[1]:
-        # print('check the same row', start_index - end_index)
-        if abs(start_index - end_index) <= 1:
-            return True
-
-        if start_index <  end_index:
-            for check_index in range(start_index+1 , end_index, 1):
-                # print("index loop", check_index, reverse_index_to_square(check_index))
-                # If any piece between start and end , the move is blocked
-                if positions[check_index] != '':
-                    return False
-
-        if start_index >  end_index:
-            for check_index in range(start_index-1 , end_index, 1):
-                # print("index loop1", check_index, reverse_index_to_square(check_index))
-                # If any piece between start and end , the move is blocked
-                if positions[check_index] != '':
-                    return False
-
-    print('Root move ok ', start_square, start_index, end_square, end_index)
-    return can_move
 
 def can_queen_moves(positions, start_index, end_index):
     """Validate if queen can move"""
-    move_like_rook = can_root_moves(positions, start_index, end_index)
-    if move_like_rook:
-        return True
 
-    move_as_bishop = can_bishop_moves(positions, start_index, end_index)
-    if move_as_bishop:
-        return True
+    start_square = reverse_index_to_square(start_index)
+    end_square = reverse_index_to_square(end_index)
 
-    return False
+    return (
+        check_move_in_diagonal_lines(positions, start_square, end_square)
+        or check_move_in_straight_lines(positions, start_square, end_square)
+    )
 
 def can_knight_move( start_index, end_index,):
     """Validate if knight can move"""

@@ -10,6 +10,7 @@ from app.lib.move_utils import (
 from app.lib.utils import (
         friendly_print_move,
         get_index_of_square,
+        reverse_index_to_square,
         get_theme,
         piece_position_to_fen,
     )
@@ -185,7 +186,7 @@ class Board:
 
             # check for special moves ie castling o o o and o-o
             if move in ["O-O",'O-O']:
-                print('castleing move')
+                print('king side castle')
                 if player == 'w':
                     piece_position[5] = 'R'
                     piece_position[6] = 'K'
@@ -199,7 +200,7 @@ class Board:
                 continue
 
             if move in ["O-O-O", 'o-o-o']:
-                print('castleing move queen side')
+                print('queen side move queen side')
                 if player == 'w':
                     piece_position[3] = 'R'
                     piece_position[2] = 'K'
@@ -239,10 +240,18 @@ class Board:
                     # need to handle capture and promotion to new piece
 
                 if player == 'b':
-                    print('black promotion come here')
+                    print('black promotion come here', raw_move, captured_and_promote)
                     print('index', index)
+                    if captured_and_promote:
+                        # need to check the pawn capture move again
+                        from_pawn_cell = ord(raw_move[0])- 97 + 8
+                        print("captured_and_promote", raw_move, from_pawn_cell, raw_move[0], pawn_cell[-2:])
+                        piece_position[from_pawn_cell] = ''
+                        index = get_index_of_square(pawn_cell[-2:])
+                    else:
+                        piece_position[index + 8] = '' # reset previous pawn
+
                     piece_position[index] = promoted_piece.lower()
-                    piece_position[index + 8] = '' # reset previous pawn
 
                 game_fens.append((piece_position_to_fen(piece_position), pawn_cell))
 
@@ -257,17 +266,23 @@ class Board:
 
             if move_index % 2 == 1:
                 move_piece = move_piece.lower()
-            #
-            if len(raw_move) == 4 and raw_move[1] in board_cols:
-                #   find index of special move
-                for i in range(1,9):
-                    cell =   raw_move[1] + str(i )
 
-                    cell_index = get_index_of_square(cell)
+            ## handle Nbxd7
+            ## Handle N3xd4
+            possible_indexes =    [i for i, x in enumerate(piece_position) if x == move_piece]
+
+            #
+            if (len(move) == 4 or (len(move) == 5 and is_captured_move)) and move[1] in board_cols:
+                #   find index of implicit move
+                print('Implicit move: ', raw_move, move, move_piece, possible_indexes)
+                for i in possible_indexes:
+                    square_name = reverse_index_to_square(i)
+                    print('******** square name', square_name, raw_move)
                     # print(cell_index, cell)
-                    if piece_position[cell_index] == move_piece:
-                        implicit_move_index = cell_index
-                        print('Implicit square move ', raw_move, implicit_move_index)
+                    # check if square is same row or same column
+                    if square_name[0] == raw_move[1] or square_name[0] == raw_move[1]:
+                        implicit_move_index = i
+                        print('Found implicit matches ', raw_move, implicit_move_index)
 
             index = get_index_of_square(move_square)
             print(move_index,move, '->', player, move_piece, move_square, index)
@@ -278,8 +293,6 @@ class Board:
                 piece_position[implicit_move_index] = ''
                 game_fens.append((piece_position_to_fen(piece_position), move_square))
                 continue
-
-            possible_indexes =    [i for i, x in enumerate(piece_position) if x == move_piece]
 
             # #white pawn move
             if move_piece == 'P':
@@ -374,14 +387,12 @@ class Board:
             # King
             if move_piece in ['K', 'k']:
                 king_index = piece_position.index(move_piece)
-                # print ('Queen move - possible_indexes', possible_indexes)
                 if king_index > 0:
                     piece_position[king_index] = ''
 
 
             if move_piece  in ['Q', 'q']:
 
-                # possible_indexes =    [i for i, x in enumerate(piece_position) if x == move_piece]
                 possible_indexes = [ move for move in possible_indexes if can_queen_moves(piece_position, move, index)]
                 friendly_print_move(move_piece, possible_indexes)
                 if len(possible_indexes) >= 1:
@@ -394,6 +405,7 @@ class Board:
 
             final_fen = piece_position_to_fen(piece_position)
             game_fens.append((final_fen, move_square) )
+
             if is_checkmate:
                 # if find the check mate, break the loop
                 break

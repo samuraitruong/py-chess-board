@@ -66,8 +66,5 @@ def generate_gift_from_pgn():
 
     images =  board.generate_gif_from_pgn(pgn)
     return serve_as_gif(images, duration)
-
-
-
 #if __name__ == '__main__':# and os.environ.get('PYTHON_ENV') == 'production':
 #    serve(api, host="0.0.0.0", port=8080)
