@@ -33,7 +33,7 @@ def playground():
     onlyfiles.sort()
     fens = []
 
-    with open(os.getcwd() +'/app/pgn/puzzle.txt', 'r') as puzzle_file:
+    with open(os.getcwd() +'/app/pgn/puzzle.txt', 'r', encoding="utf-8") as puzzle_file:
         fens = puzzle_file.readlines()
 
     data_sources = []
