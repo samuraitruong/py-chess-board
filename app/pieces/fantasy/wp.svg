@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="1000 200.306 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <linearGradient id="linearGradient5543" gradientUnits="userSpaceOnUse" x1="559.771" y1="313.20999" x2="911.98419" y2="460.03769" xlink:href="#linearGradientWhitePieces"/>
+    <linearGradient id="linearGradientWhitePieces">
+      <stop id="stop7929" offset="0" style="stop-color:#ede3de;stop-opacity:1;"/>
+      <stop id="stop7931" offset="1" style="stop-color:#8a6737;stop-opacity:1;"/>
+    </linearGradient>
+    <linearGradient id="linearGradient5545" gradientUnits="userSpaceOnUse" x1="582.45242" y1="373.33334" x2="937.54758" y2="373.33334" xlink:href="#linearGradientWhitePiecesBorder"/>
+    <linearGradient id="linearGradientWhitePiecesBorder">
+      <stop style="stop-color:#000000;stop-opacity:1;" offset="0" id="stop7935"/>
+      <stop style="stop-color:#000000;stop-opacity:1;" offset="1" id="stop7937"/>
+    </linearGradient>
+    <linearGradient id="linearGradient4991" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.22857143,0,0,0.22857143,1000,200)" x1="271.88867" y1="669.63373" x2="664.87592" y2="767.08215" xlink:href="#linearGradientWhitePieces"/>
+    <linearGradient id="linearGradient4993" gradientUnits="userSpaceOnUse" x1="1055.0989" y1="142.84614" x2="1147.7171" y2="142.84614" gradientTransform="matrix(0.99812851,0,0,0.99812851,1.871491,200)" xlink:href="#linearGradientWhitePiecesBorder"/>
+    <linearGradient id="linearGradient4986" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.22857143,0,0,0.22857143,1000,200)" x1="275.24356" y1="458.6561" x2="672.69525" y2="525.81299" xlink:href="#linearGradientWhitePieces"/>
+    <linearGradient id="linearGradient4988" gradientUnits="userSpaceOnUse" x1="1053.1838" y1="105.03224" x2="1150.4736" y2="105.03224" gradientTransform="matrix(0.99812851,0,0,0.99812851,1.871491,200)" xlink:href="#linearGradientWhitePiecesBorder"/>
+    <linearGradient id="linearGradient4983" gradientUnits="userSpaceOnUse" x1="1075.8267" y1="163.4315" x2="1122.5205" y2="163.4315" gradientTransform="matrix(0.99812851,0,0,0.99812851,1.871491,200)" xlink:href="#linearGradientWhitePiecesBorder"/>
+  </defs>
+  <g id="WhitePawn" transform="matrix(1, 0, 0, 1, 0, 0.30555)">
+    <rect style="fill:none;stroke:none" id="rect7689" width="200" height="200" x="1000" y="200"/>
+    <path style="fill:url(#linearGradient5543);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient5545);stroke-width:21.76181984;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" id="path7691" d="m 926.66667,373.33334 a 166.66667,150 0 1 1 -333.33334,0 166.66667,150 0 1 1 333.33334,0 z" transform="matrix(0.16787953,0,0,0.16822697,972.4205,206.95678)"/>
+    <path style="fill:url(#linearGradient4991);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient4993);stroke-width:3.65714288;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" d="m 1090.8382,306.74527 c 0.3356,38.89697 -19.8248,50.53664 -29.2496,57.19902 -7.8152,5.52462 -5.8201,18.821 4.55,19.49968 6.4257,0.42054 63.2257,0.53965 69.863,-0.19285 11.7442,-1.2961 12.079,-15.24551 4.5001,-19.95682 -12.0249,-7.47486 -31.1294,-15.8943 -31.6567,-56.47758 -0.1008,-7.61419 -18.0666,-6.85922 -18.0068,-0.0715 z" id="path7693"/>
+    <path style="fill:url(#linearGradient4986);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient4988);stroke-width:3.65714288;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" d="m 1077.795,298.91082 c -16.9588,4.35787 -22.8822,15.09008 -22.8822,15.09008 l 93.4506,0 c 0,0 -9.9274,-11.8481 -25.1485,-15.24213 -19.4835,-4.34445 -29.5254,-3.93233 -45.4199,0.15205 z" id="path7695"/>
+    <path style="fill:none;stroke:url(#linearGradient4983);stroke-width:3.65714288;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" d="m 1077.5134,363.12564 42.9492,0" id="path7697"/>
+  </g>
+</svg>

@@ -54,7 +54,7 @@
     <script>
       current_theme = "default";
       piece_set = "";
-
+      frame_duration = 1000;
       function refreshBoardImage(data) {
         if (!data) {
           data = document.querySelector("#input").value;
@@ -63,7 +63,7 @@
         if (data.includes("/")) {
           imageUrl = "/?fen=" + encodeURIComponent(data.trim()) + "&t=" + new Date().getTime();
         } else {
-          imageUrl = "/gif?duration=1000&pgn=" + encodeURIComponent(data.trim()) + "&t=" + new Date().getTime();
+          imageUrl = `/gif?duration=${frame_duration}&pgn=${encodeURIComponent(data.trim())}&t=${new Date().getTime()}`;
         }
         imageUrl = imageUrl += "&theme=" + current_theme;
         if (piece_set) {
@@ -93,11 +93,15 @@
       }
       function setPieceSet() {
         piece_set = document.querySelector("#pieceset").value;
-        console.log("hahahah", piece_set);
         refreshBoardImage();
       }
       function setTheme(theme) {
         current_theme = theme;
+        refreshBoardImage();
+      }
+      function rangeChange() {
+        frame_duration = document.querySelector("#durationRange").value;
+        document.querySelector("#rangeLabel").textContent = `Gif delay ${frame_duration} (ms)`;
         refreshBoardImage();
       }
     </script>
@@ -136,12 +140,30 @@
               <option value="{{member}}">{{member}}</option>
               {% endfor %}
             </select>
+            <label for="durationRange" class="form-label mt-3" id="rangeLabel">Gif delay 1000 (ms): </label>
+            <input
+              type="range"
+              class="form-range"
+              min="100"
+              value="1000"
+              max="10000"
+              id="durationRange"
+              onchange="rangeChange()"
+            />
 
             <label class="form-label mt-2">PGN or FEN:</label>
             <textarea rows="8" class="form-control mb-3" onchange="onTextChange()" id="input">
-7B/3B1p2/rP1p2R1/n2k1Pb1/N2Pp3/4P3/K2nN1r1/2R5</textarea
+rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1</textarea
             >
             <div class="float-end">
+              <button
+                onclick="setData('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')"
+                type="button"
+                class="btn btn-info"
+              >
+                Start possition
+              </button>
+
               <button onclick="onTextChange()" type="button" class="btn btn-primary">View</button>
 
               <a type="button" class="btn btn-success" href="" id="link" target="_blank">Open URL</a>

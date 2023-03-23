@@ -47,7 +47,7 @@ def playground():
     # piece_sets = []
 
     subfolders= [f.name for f in os.scandir(piece_set_folder) if f.is_dir()]
-
+    subfolders.sort()
     return render_template('playground.html',
                            data_sources= data_sources,
                            themes = ['bw', 'orange', 'green', 'blue', 'default'],

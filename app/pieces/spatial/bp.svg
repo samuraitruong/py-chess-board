@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="1000 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <linearGradient id="linearGradient2232" x1="250.33334" y1="541.66669" x2="671.33337" y2="718.33331" gradientUnits="userSpaceOnUse" xlink:href="#linearGradientBlackPieces"/>
+    <linearGradient id="linearGradientBlackPieces">
+      <stop id="stop2268" offset="0" style="stop-color:#000000;stop-opacity:1;"/>
+      <stop id="stop2270" offset="1" style="stop-color:#505070;stop-opacity:1;"/>
+    </linearGradient>
+    <linearGradient id="linearGradient17655" x1="265.33334" y1="605" x2="644.66669" y2="605" gradientUnits="userSpaceOnUse" xlink:href="#linearGradientBlackPiecesBorder"/>
+    <linearGradient id="linearGradientBlackPiecesBorder">
+      <stop style="stop-color:#808080;stop-opacity:1;" offset="0" id="stop7192"/>
+      <stop style="stop-color:#808080;stop-opacity:1;" offset="1" id="stop7194"/>
+    </linearGradient>
+  </defs>
+  <g id="BlackPawn">
+    <rect y="0" x="1000" height="200" width="200" id="rect8054-9" style="fill:none;stroke:none"/>
+    <path transform="matrix(0.22857143,0,0,0.22857143,996.95238,0.38095)" d="m 636.66667,605 a 181.66667,185 0 1 1 -363.33334,0 181.66667,185 0 1 1 363.33334,0 z" id="path1351" style="opacity:0.98999999;fill:url(#linearGradient2232);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient17655);stroke-width:16;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"/>
+  </g>
+</svg>
