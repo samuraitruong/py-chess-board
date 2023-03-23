@@ -119,21 +119,19 @@
           <div class="panel panel-primary t-2">
             <div class="row">
               <label class="form-label">Theme:</label>
-              {% for member in themes: %}
-              <div class="col-md-4 col">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault{{loop.index}}"
-                  onclick="setTheme('{{member}}')"
-                  checked="{{member == 'default'}}"
-                />
-                <label class="form-check-label" for="flexRadioDefault{{loop.index}}"> {{member}} </label>
-              </div>
-              {% endfor %}
+              <select
+                id="themes"
+                class="form-select"
+                aria-label="Default select example"
+                onchange="setTheme(this.value)"
+              >
+                <option selected>Select a theme</option>
+                {% for member in themes: %}
+                <option value="{{member}}">{{member}}</option>
+                {% endfor %}
+              </select>
             </div>
-            <label class="form-label">Piece set:</label>
+            <label class="form-label mt-2">Piece set:</label>
             <select id="pieceset" class="form-select" aria-label="Default select example" onchange="setPieceSet()">
               <option selected>Select piece set</option>
               {% for member in piece_sets: %}

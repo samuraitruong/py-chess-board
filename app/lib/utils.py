@@ -8,7 +8,9 @@ from app.lib.theme.blue_theme import BlueTheme
 from app.lib.theme.green_theme import GreenTheme
 from app.lib.theme.default_theme import DefaultTheme
 from app.lib.theme.bw_theme import BlackWhiteTheme
+from app.lib.theme.marble_theme import MarbleTheme
 from app.lib.theme.orange_theme import OrangeTheme
+from app.lib.theme.walnut_theme import WalnutTheme
 
 def make_temp_name(directory = tf.gettempdir()):
     """ Create tmp file name"""
@@ -76,6 +78,11 @@ def get_theme(name):
     if name == 'blue':
         return BlueTheme()
 
+    if name == 'marble':
+        return MarbleTheme()
+
+    if name == 'walnut':
+        return WalnutTheme()
     return DefaultTheme()
 
 

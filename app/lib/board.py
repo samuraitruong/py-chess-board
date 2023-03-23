@@ -19,7 +19,7 @@ class Board:
     """Chess board"""
     def __init__(self, fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR', theme="default", debug = False):
         self.size = (850, 850)
-
+        self.square_size = 100
         self.board = None
         self.theme = get_theme(theme)
         self.frame_size = 25
@@ -29,6 +29,10 @@ class Board:
     def generate(self, hightlight_square = None, view_as = 'w'):
         """Generate image"""
         self.board = Image.new('RGB', size=self.size, color= self.theme.base_color)
+        if self.theme.board_image:
+            self.board.paste(self.theme.board_image.resize((self.square_size * 8, self.square_size * 8)),
+                            (self.frame_size, self.frame_size))
+
         for i in range(0,64):
             hightlighted = hightlight_square and get_index_of_square(hightlight_square) == i
             self.draw_square(i, hightlighted, view_as)
@@ -74,12 +78,12 @@ class Board:
 
         if hightlight:
             color = self.theme.active_square_color
-
-        square.rectangle(shape,
-                         fill = color,
-                         width= self.theme.square_border_width,
-                         outline= self.theme.square_border_color
-                    )
+        if self.theme.board_image is None:
+            square.rectangle(shape,
+                            fill = color,
+                            width= self.theme.square_border_width,
+                            outline= self.theme.square_border_color
+                        )
 
         drawer = ImageDraw.Draw(self.board )
         piece = self.find_piece(row, col)

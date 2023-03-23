@@ -50,7 +50,7 @@ def playground():
     subfolders.sort()
     return render_template('playground.html',
                            data_sources= data_sources,
-                           themes = ['bw', 'orange', 'green', 'blue', 'default'],
+                           themes = ['walnut','bw', 'orange', 'green', 'blue', 'marble','default'],
                            piece_sets = subfolders,
                            fen_sources = fens
                            )

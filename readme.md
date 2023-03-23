@@ -237,6 +237,6 @@ http://localhost:8080/?fen=8/4Kn2/1p1P2p1/Q1B2kp1/1P1r4/3P1N1P/4N1n1/1B2b3&piece
 ## Credit
 
 The project using multiple icons is licensed under the `Creative Commons Attribution` from flaticon.io
-Most of the piece set come from lichess
+Most of the piece set come from lichess.org
 - https://github.com/lichess-org/lila/tree/master/public/piece
--
+- some board images and pieces come from chess.com

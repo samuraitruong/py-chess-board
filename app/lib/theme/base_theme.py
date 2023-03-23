@@ -7,15 +7,19 @@ cache = {} # maybe use lru_cache but now keep it simple
 
 class Theme: # pylint: disable=too-few-public-methods
     """Theme base"""
-    def __init__(self, piece_set):
+    def __init__(self, piece_set, board_image= None):
         self.piece_set = piece_set
         self.square_border_width = 0
         self.square_border_color = None
         self.active_square_color = 'red'
+        self.board_image = None
+
         self.font = {
             "large" : ImageFont.truetype("app/fonts/arial/arial.ttf", 24),
             "regular": ImageFont.truetype("app/fonts/arial/arial.ttf", 18)
         }
+        if board_image is not None:
+            self.board_image = Image.open(board_image)
 
     def get_symbol_image(self, piece_name, size=(85, 85)):
         """Get the image"""
