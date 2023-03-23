@@ -59,6 +59,10 @@
         if (!data) {
           data = document.querySelector("#input").value;
         }
+        if (data.includes("1.")) {
+          index = data.indexOf("1.");
+          data = data.substring(index).replace("\n", "");
+        }
         imageUrl = "";
         if (data.includes("/")) {
           imageUrl = "/?fen=" + encodeURIComponent(data.trim()) + "&t=" + new Date().getTime();
@@ -103,6 +107,17 @@
         frame_duration = document.querySelector("#durationRange").value;
         document.querySelector("#rangeLabel").textContent = `Gif delay ${frame_duration} (ms)`;
         refreshBoardImage();
+      }
+      function openFile(e) {
+        let reader = new FileReader();
+        console.log(e.files[0]);
+        if (e.files[0].name.includes(".pgn")) {
+          reader.readAsText(e.files[0]);
+
+          reader.onload = function () {
+            setData(reader.result);
+          };
+        }
       }
     </script>
   </head>
@@ -194,6 +209,11 @@ rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1</textarea
             <option value="{{member}}">{{member}}</option>
             {% endfor %}
           </select>
+
+          <div class="mt-5">
+            <label for="formFile" class="form-label">Or open a PGN file</label>
+            <input class="form-control" type="file" id="pgnFile" onchange="openFile(this)" />
+          </div>
         </div>
         <div class="col-8 wrapper">
           <span class="loader"></span>

@@ -185,7 +185,7 @@ class Board:
         pgn_moves = [move for move in pgn.split(' ')
                      if "." not in move
                      and len(move) > 0
-                     and move not in ['1-0', '0-1', '1/2-1-2']]
+                     and move not in ['1-0', '0-1', '1/2-1-2', "*"]]
 
         board_cols = ['a','b','c','d','e','f','g','h']
         for move_index, raw_move in enumerate(pgn_moves):
