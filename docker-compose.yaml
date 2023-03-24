@@ -11,5 +11,5 @@ services:
     environment:
       - FLASK_DEBUG=1
       - DEBUG=1
-      - PYTHON_ENV=production
-    # command: "flask --debug run -h 0.0.0.0 --port 8888"
+      - PYTHON_ENV=development
+      # - PYTHON_ENV=production -> to test production run mode.

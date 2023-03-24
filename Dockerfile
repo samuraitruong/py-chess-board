@@ -12,7 +12,8 @@ RUN pip3 install -r requirements.txt
 COPY . .
 EXPOSE 8080
 
-RUN ls
+RUN chmod +x ./start.sh
+ENV PYTHON_ENV=production
 ENV FLASK_APP=app/main.py
 # CMD [ "python3", "app/main.py"]
-CMD ["./start.sh"]
+CMD ["sh", "/app/start.sh"]
