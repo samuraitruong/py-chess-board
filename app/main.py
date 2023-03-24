@@ -5,6 +5,7 @@ from os.path import isfile, join
 from flask import Flask, request, render_template
 from app.lib.board import Board
 from app.lib.utils import serve_as_gif, serve_pil_image
+from app.lib.theme.base_theme import Theme
 
 api = Flask(__name__,
             static_url_path='/static',
@@ -50,7 +51,7 @@ def playground():
     subfolders.sort()
     return render_template('playground.html',
                            data_sources= data_sources,
-                           themes = ['walnut','bw', 'orange', 'green', 'blue', 'marble','default'],
+                           themes = Theme.get_theme_list(),
                            piece_sets = subfolders,
                            fen_sources = fens
                            )
@@ -77,5 +78,6 @@ def generate_gift_from_pgn():
     board = Board( theme = theme, debug=os.environ.get('DEBUG', '0') == "1" )
     if request.args.get('piece'):
         board.theme.set_piece_set(request.args.get('piece'))
+
     images =  board.generate_gif_from_pgn(pgn)
     return serve_as_gif(images, duration)

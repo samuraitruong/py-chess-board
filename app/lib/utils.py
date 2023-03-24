@@ -4,13 +4,6 @@ import os
 import uuid
 import tempfile as tf
 from flask import send_file
-from app.lib.theme.blue_theme import BlueTheme
-from app.lib.theme.green_theme import GreenTheme
-from app.lib.theme.default_theme import DefaultTheme
-from app.lib.theme.bw_theme import BlackWhiteTheme
-from app.lib.theme.marble_theme import MarbleTheme
-from app.lib.theme.orange_theme import OrangeTheme
-from app.lib.theme.walnut_theme import WalnutTheme
 
 def make_temp_name(directory = tf.gettempdir()):
     """ Create tmp file name"""
@@ -62,29 +55,6 @@ def reverse_index_to_square(index):
     row = str(int(index/8) + 1)
     col = chr(index %8 + 97 )
     return col + row
-
-
-def get_theme(name):
-    """Get themes from a given name"""
-    if name == 'green':
-        return GreenTheme()
-
-    if name == 'bw':
-        return BlackWhiteTheme()
-
-    if name == 'orange':
-        return OrangeTheme()
-
-    if name == 'blue':
-        return BlueTheme()
-
-    if name == 'marble':
-        return MarbleTheme()
-
-    if name == 'walnut':
-        return WalnutTheme()
-    return DefaultTheme()
-
 
 def piece_position_to_fen(piece_position):
     """ Reverse piece position to FEN strings"""

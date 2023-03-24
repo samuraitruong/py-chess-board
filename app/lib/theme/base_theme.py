@@ -1,5 +1,9 @@
 """Base theme class"""
 import os
+import inspect
+import sys
+import importlib
+from os.path import isfile, join
 from cairosvg import svg2png
 from PIL import Image, ImageFont
 
@@ -69,3 +73,27 @@ class Theme: # pylint: disable=too-few-public-methods
     def set_piece_set(self, piece_set):
         """set piece set"""
         self.piece_set = piece_set
+    @staticmethod
+    def get_theme_list():
+        """Return the list of theme"""
+        theme_dir = os.getcwd() + '/app/lib/theme'
+        theme_names = [f.replace('_theme.py', '') for f in os.listdir(theme_dir)
+                    if isfile(join(theme_dir, f)) and '_theme.py'  in f and 'base_' not in f]
+        theme_names.sort()
+        return theme_names
+
+    @staticmethod
+    def get_theme(name):
+        """Get themes from a given name"""
+        if not name:
+            name = 'default'
+
+        module_name = f"app.lib.theme.{name}_theme"
+
+        dynamic_import = importlib.import_module(module_name)
+
+        classes = [cls_name for cls_name, cls_obj in inspect.getmembers(sys.modules[module_name])
+                if inspect.isclass(cls_obj) and cls_name != 'Theme']
+
+        theme_class = getattr(dynamic_import, classes[0])
+        return theme_class()

@@ -1,5 +1,6 @@
 """Chess board"""
 from PIL import Image, ImageDraw
+from app.lib.theme.base_theme import Theme
 from app.lib.move_utils import (
     can_knight_move,
     can_queen_moves,
@@ -11,7 +12,6 @@ from app.lib.utils import (
         friendly_print_move,
         get_index_of_square,
         reverse_index_to_square,
-        get_theme,
         piece_position_to_fen,
     )
 
@@ -21,7 +21,7 @@ class Board:
         self.size = (850, 850)
         self.square_size = 100
         self.board = None
-        self.theme = get_theme(theme)
+        self.theme = Theme.get_theme(theme)
         self.frame_size = 25
         self.fen = fen or 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
         self.debug = debug
@@ -76,14 +76,22 @@ class Board:
         if (row %2 ==0 and col %2 == 1) or (row %2 ==1 and col %2 == 0):
             color = self.theme.white_color
 
-        if hightlight:
-            color = self.theme.active_square_color
+
         if self.theme.board_image is None:
             square.rectangle(shape,
                             fill = color,
                             width= self.theme.square_border_width,
                             outline= self.theme.square_border_color
                         )
+
+        if hightlight:
+            color = self.theme.active_square_color
+            square.rectangle(shape,
+                            fill = color,
+                            width= self.theme.square_border_width,
+                            outline= self.theme.square_border_color
+                        )
+
 
         drawer = ImageDraw.Draw(self.board )
         piece = self.find_piece(row, col)
