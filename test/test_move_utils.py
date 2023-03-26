@@ -1,5 +1,5 @@
 """Test move utils"""
-from app.lib.move_utils import range_of,get_square_between, get_diagonal_square_between
+from app.lib.move_utils import break_down_knight_move, range_of,get_square_between, get_diagonal_square_between
 
 def test_range_of():
     """Test range_of function"""
@@ -45,3 +45,11 @@ def test_get_diagonal_square_between():
     assert(get_diagonal_square_between('d1', 'a4') ) == ['c2', 'b3']
     assert(get_diagonal_square_between('g2', 'b7') ) == ['f3', 'e4', 'd5', 'c6']
     assert(get_diagonal_square_between('a4', 'e8') ) == ['b5', 'c6', 'd7']
+
+def test_break_down_knight_move():
+    """Teset breakdown knight move"""
+    assert(break_down_knight_move(('b1', 'c3')) ) == (('b1', 'b3'), ('b3', 'c3'))
+    assert(break_down_knight_move(('c3', 'e4')) ) == (('c3', 'e3'), ('e3', 'e4'))
+    assert(break_down_knight_move(('g8', 'f6')) ) == (('g8', 'g6'), ('g6', 'f6'))
+    assert(break_down_knight_move(('f6', 'd5')) ) == (('f6', 'd6'), ('d6', 'd5'))
+    assert(break_down_knight_move(('d5', 'f6')) ) == (('d5', 'f5'), ('f5', 'f6'))

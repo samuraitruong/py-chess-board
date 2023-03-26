@@ -4,6 +4,7 @@ from PIL import Image, ImageDraw
 
 from app.lib.theme.base_theme import Theme
 from app.lib.move_utils import (
+    break_down_knight_move,
     can_knight_move,
     can_queen_moves,
     can_root_moves,
@@ -47,7 +48,8 @@ class Board:
         if arrow_squares:
 
             self.draw_move_arrow(arrow_squares[0], arrow_squares[1])
-        # self.draw_move_arrow('f5', 'g4')
+        # sample knight move
+        # self.draw_move_arrow('c3', 'e4')
         # self.draw_move_arrow('e7', 'a4')
         # self.draw_move_arrow('f1', 'g2')
         # self.draw_move_arrow('c1', 'd1')
@@ -184,45 +186,63 @@ class Board:
             width=2
             )
 
-    def draw_move_arrow(self, from_square, to_square):
+
+    def draw_move_arrow(self, from_square, to_square, arrow_head = True, draw_circle = False):
         """Draw a move arrow between square and square"""
         # https://stackoverflow.com/questions/43527894/drawing-arrowheads-which-follow-the-direction-of-the-line-in-pygame
-        arrow_image = Image.new('RGBA', size=self.size, color=(255, 255, 255, 0))
         start_x, start_y = get_square_coordinates(from_square, self.square_size)
         end_x, end_y = get_square_coordinates(to_square, self.square_size)
+        diff_x = abs(int((start_x - end_x) /100))
+        diff_y = abs(int((start_y - end_y)/100))
 
-        drawer = ImageDraw.Draw(arrow_image )
-        center_adjustment  = self.square_size/2 + self.frame_size
-
-        start_point = (start_x + center_adjustment, start_y + center_adjustment)
-        end_point = (end_x + center_adjustment, end_y + center_adjustment)
-        x_0, y_0 = start_point
-        x_1, y_1 = end_point
+        if  (diff_x == 2 and diff_y ==1) or (diff_x ==1 and diff_y == 2):
+            line1, line2 =  break_down_knight_move((from_square, to_square))
+            self.draw_move_arrow(line1[0], line1[1], False, True)
+            self.draw_move_arrow(line2[0], line2[1], True)
 
 
-        # if(x_1 == x_0):
-        if y_0 != y_1:
-            shorter_arrow = 30 * (y_0- y_1)/(abs (y_0-y_1))
-            y_1 = y_1 + shorter_arrow
+        else:
+            arrow_image = Image.new('RGBA', size=self.size, color=(255, 255, 255, 0))
 
-        # if(y_1 == y_0):
-        if x_0 != x_1:
-            shorter_arrow = 30 * (x_0- x_1)/(abs (x_0-x_1))
-            x_1 = x_1 + shorter_arrow
+            # reset x
+            drawer = ImageDraw.Draw(arrow_image )
+            center_adjustment  = self.square_size/2 + self.frame_size
 
-        drawer.line(((x_0, y_0),( x_1, y_1)), fill  = self.theme.move_arrow_color, width=30)
+            start_point = (start_x + center_adjustment, start_y + center_adjustment)
+            end_point = (end_x + center_adjustment, end_y + center_adjustment)
+            x_0, y_0 = start_point
+            x_1, y_1 = end_point
 
-        trirad = 30
-        rotation = math.degrees(math.atan2(x_1-x_0, y_1 -y_0)) + 120
-        points = [
-            (int(x_1+trirad*math.sin(math.radians(rotation))), int(y_1+trirad*math.cos(math.radians(rotation)))),
-            (x_1+trirad*math.sin(math.radians(rotation-120)), y_1+trirad*math.cos(math.radians(rotation-120))),
-            (x_1+trirad*math.sin(math.radians(rotation+120)), y_1+trirad*math.cos(math.radians(rotation+120)))
-        ]
 
-        drawer.polygon(points, fill=self.theme.move_arrow_color)
+            # if(x_1 == x_0):
+            if y_0 != y_1 and arrow_head:
+                shorter_arrow = 30 * (y_0- y_1)/(abs (y_0-y_1))
+                y_1 = y_1 + shorter_arrow
 
-        self.board.paste(arrow_image, mask= arrow_image)
+            # if(y_1 == y_0):
+            if x_0 != x_1 and arrow_head:
+                shorter_arrow = 30 * (x_0- x_1)/(abs (x_0-x_1))
+                x_1 = x_1 + shorter_arrow
+
+            drawer.line(((x_0, y_0),( x_1, y_1)), fill  = self.theme.move_arrow_color, width=30)
+            if arrow_head:
+                trirad = 30
+                rotation = math.degrees(math.atan2(x_1-x_0, y_1 -y_0)) + 120
+                points = [
+                    (int(x_1+trirad*math.sin(math.radians(rotation))),
+                     int(y_1+trirad*math.cos(math.radians(rotation)))),
+                    (x_1+trirad*math.sin(math.radians(rotation-120)),
+                     y_1+trirad*math.cos(math.radians(rotation-120))),
+                    (x_1+trirad*math.sin(math.radians(rotation+120)),
+                     y_1+trirad*math.cos(math.radians(rotation+120)))
+                ]
+
+                drawer.polygon(points, fill=self.theme.move_arrow_color)
+
+            if draw_circle:
+                border = 14
+                drawer.ellipse((x_1-border, y_1-border, x_1+border, y_1+border), fill=self.theme.move_arrow_color)
+            self.board.paste(arrow_image, mask= arrow_image)
 
     def pgn2fen(self, raw_pgn):
         """

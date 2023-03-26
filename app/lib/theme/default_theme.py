@@ -13,3 +13,4 @@ class DefaultTheme(Theme): # pylint: disable=too-few-public-methods
         self.frame_text_color = '#fff'
         self.border_outline_color = '#5e483e'
         self.active_square_color = '#ed2d18cc'
+        self.move_arrow_color = '#00aa00aa'

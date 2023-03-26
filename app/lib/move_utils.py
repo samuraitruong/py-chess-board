@@ -136,3 +136,17 @@ def can_knight_move( start_index, end_index,):
 
     # check move like Bishop
     return False
+
+def break_down_knight_move(knight_move):
+    """ Get 2 point that knight moves breaking down to"""
+    start, end = knight_move
+
+    start_col = start[0]
+    start_row = start[1]
+    end_col = end[0]
+    end_row = end[1]
+
+    if abs(ord(start_col) - ord(end_col)) == 2:
+        return ((start, end_col+start_row), (end_col+start_row,end))
+
+    return ((start, start_col+end_row), (start_col+end_row,end))
