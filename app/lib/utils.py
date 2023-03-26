@@ -35,6 +35,7 @@ def serve_pil_image(pil_img, size=1000):
     width = pil_img.width
     if width != size:
         final_img = pil_img.resize((size, size))
+    # final_img.convert('RGBA')
     final_img.save(img_io, 'PNG', quality=100)
     img_io.seek(0)
     return send_file(img_io, mimetype='image/png')
@@ -88,3 +89,12 @@ def friendly_print_move(piece, positions):
     """Debug print of piece"""
     moves = [(idx,reverse_index_to_square(idx) )for idx in positions]
     print("Possible move", piece, moves)
+
+def get_square_coordinates(square_name, square_width):
+    """ Get square name index a1 -< 1, 1"""
+    row = 8 -int(square_name[1])
+    col = abs( -97 + ord(square_name[0]))
+    # print((square_name, col, row))
+    return (
+         col * square_width, row * square_width
+    )

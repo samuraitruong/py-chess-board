@@ -14,3 +14,4 @@ class OrangeTheme(Theme): # pylint: disable=too-few-public-methods
         self.border_outline_color = '#402E2B'
         self.square_border_width =3
         self.square_border_color = '#D3D4D5'
+        self.active_square_color = "#30D2F2CC"

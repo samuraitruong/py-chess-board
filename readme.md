@@ -49,6 +49,7 @@ curl https://chess-board.fly.dev/?fen=8/4Kn2/1p1P2p1/Q1B2kp1/1P1r4/3P1N1P/4N1n1/
 - **piece**: the piece set name, please refer below to see the full list
 - **duration**: the duration between 2 move default 1000ms
 - **total_duration**: the animation length of the gif, this will overwrite the duration parameter if provided
+- **arrow**: true|false or 0:1 to draw the move arrow indicating the start and end square
 
 Some PGN examples (you can get more from unit tests)
 

@@ -1,0 +1,18 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2023.03.25"]
+[Round "?"]
+[White "Pacho007"]
+[Black "samuraitruong"]
+[Result "0-1"]
+[ECO "C23"]
+[WhiteElo "956"]
+[BlackElo "873"]
+[TimeControl "600"]
+[EndTime "17:49:17 PDT"]
+[Termination "samuraitruong won by resignation"]
+
+1. e4 e5 2. Bc4 f6 3. Nc3 c6 4. Nf3 d5 5. exd5 cxd5 6. Nxd5 a6 7. Nb4 b5 8. Nd3
+bxc4 9. Ndxe5 fxe5 10. O-O e4 11. Ne5 Be6 12. Re1 Qd5 13. d4 cxd3 14. f4 exf3
+15. Nxf3 Qf5 16. Nd4 Bc5 17. Rf1 Bxd4+ 18. Kh1 Qd5 19. Qe1 Nf6 20. h4 O-O 21.
+Qg3 Ne4 22. Qxd3 Rxf1+ 23. Qxf1 Ng3+ 0-1

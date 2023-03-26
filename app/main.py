@@ -43,8 +43,7 @@ def playground():
             pgn = pgn_file.read()
             index = pgn.index('1. ')
             pgn_only = pgn[index-2:].replace('\n', ' ')
-            print(index , pgn_only)
-            data_sources.append(pgn_only)
+            data_sources.append((file_name,pgn_only ))
     # piece_sets = []
 
     subfolders= [f.name for f in os.scandir(piece_set_folder) if f.is_dir()]
@@ -73,11 +72,13 @@ def generate_gift_from_pgn():
     """Generate gift from pgn """
     pgn = request.args.get('pgn')
     theme = request.args.get('theme')
+    move_arrow = request.args.get('arrow', False, bool)
     duration = int(request.args.get('duration', "1000"))
     # size = int(request.args.get('size', "400"))
     board = Board( theme = theme, debug=os.environ.get('DEBUG', '0') == "1" )
     if request.args.get('piece'):
         board.theme.set_piece_set(request.args.get('piece'))
 
-    images =  board.generate_gif_from_pgn(pgn)
+    images =  board.generate_gif_from_pgn(pgn,
+                move_arrow in ['true', '1', True])
     return serve_as_gif(images, duration)

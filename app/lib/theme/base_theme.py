@@ -17,6 +17,7 @@ class Theme: # pylint: disable=too-few-public-methods
         self.square_border_color = None
         self.active_square_color = 'red'
         self.board_image = None
+        self.move_arrow_color = '#EA883A99'
 
         self.font = {
             "large" : ImageFont.truetype("app/fonts/arial/arial.ttf", 24),

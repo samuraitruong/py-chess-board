@@ -1,5 +1,7 @@
 """Chess board"""
+import math
 from PIL import Image, ImageDraw
+
 from app.lib.theme.base_theme import Theme
 from app.lib.move_utils import (
     can_knight_move,
@@ -11,6 +13,7 @@ from app.lib.move_utils import (
 from app.lib.utils import (
         friendly_print_move,
         get_index_of_square,
+        get_square_coordinates,
         reverse_index_to_square,
         piece_position_to_fen,
     )
@@ -20,15 +23,16 @@ class Board:
     def __init__(self, fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR', theme="default", debug = False):
         self.size = (850, 850)
         self.square_size = 100
+
         self.board = None
         self.theme = Theme.get_theme(theme)
         self.frame_size = 25
         self.fen = fen or 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
         self.debug = debug
 
-    def generate(self, hightlight_square = None, view_as = 'w'):
+    def generate(self, hightlight_square = None, view_as = 'w', arrow_squares = None):
         """Generate image"""
-        self.board = Image.new('RGB', size=self.size, color= self.theme.base_color)
+        self.board = Image.new('RGBA', size=self.size, color= self.theme.base_color)
         if self.theme.board_image:
             self.board.paste(self.theme.board_image.resize((self.square_size * 8, self.square_size * 8)),
                             (self.frame_size, self.frame_size))
@@ -40,7 +44,15 @@ class Board:
         self.draw_frame()
         if view_as in ['b', 'black']:
             return self.board.rotate(180)
+        if arrow_squares:
 
+            self.draw_move_arrow(arrow_squares[0], arrow_squares[1])
+        # self.draw_move_arrow('f5', 'g4')
+        # self.draw_move_arrow('e7', 'a4')
+        # self.draw_move_arrow('f1', 'g2')
+        # self.draw_move_arrow('c1', 'd1')
+        # self.draw_move_arrow('h8', 'h4')
+        # self.draw_move_arrow('e7', 'a7')
         return self.board
 
     def find_piece(self, row, col):
@@ -86,12 +98,17 @@ class Board:
 
         if hightlight:
             color = self.theme.active_square_color
-            square.rectangle(shape,
-                            fill = color,
-                            width= self.theme.square_border_width,
-                            outline= self.theme.square_border_color
-                        )
+            hightlight_square_img = Image.new('RGBA', size = (square_size+1, square_size+1), color=color)
+            drawer = ImageDraw.Draw(hightlight_square_img)
+            # square.rectangle(shape,
+            #                 fill = color,
+            #                 width= self.theme.square_border_width,
+            #                 outline= self.theme.square_border_color
 
+            drawer.rectangle((0,0,square_size+1, square_size+1 ),
+                            width= self.theme.square_border_width,
+                            outline= self.theme.square_border_color)
+            self.board.paste(hightlight_square_img, (x_coord, y_coord), mask= hightlight_square_img)
 
         drawer = ImageDraw.Draw(self.board )
         piece = self.find_piece(row, col)
@@ -167,6 +184,46 @@ class Board:
             width=2
             )
 
+    def draw_move_arrow(self, from_square, to_square):
+        """Draw a move arrow between square and square"""
+        # https://stackoverflow.com/questions/43527894/drawing-arrowheads-which-follow-the-direction-of-the-line-in-pygame
+        arrow_image = Image.new('RGBA', size=self.size, color=(255, 255, 255, 0))
+        start_x, start_y = get_square_coordinates(from_square, self.square_size)
+        end_x, end_y = get_square_coordinates(to_square, self.square_size)
+
+        drawer = ImageDraw.Draw(arrow_image )
+        center_adjustment  = self.square_size/2 + self.frame_size
+
+        start_point = (start_x + center_adjustment, start_y + center_adjustment)
+        end_point = (end_x + center_adjustment, end_y + center_adjustment)
+        x_0, y_0 = start_point
+        x_1, y_1 = end_point
+
+
+        # if(x_1 == x_0):
+        if y_0 != y_1:
+            shorter_arrow = 30 * (y_0- y_1)/(abs (y_0-y_1))
+            y_1 = y_1 + shorter_arrow
+
+        # if(y_1 == y_0):
+        if x_0 != x_1:
+            shorter_arrow = 30 * (x_0- x_1)/(abs (x_0-x_1))
+            x_1 = x_1 + shorter_arrow
+
+        drawer.line(((x_0, y_0),( x_1, y_1)), fill  = self.theme.move_arrow_color, width=30)
+
+        trirad = 30
+        rotation = math.degrees(math.atan2(x_1-x_0, y_1 -y_0)) + 120
+        points = [
+            (int(x_1+trirad*math.sin(math.radians(rotation))), int(y_1+trirad*math.cos(math.radians(rotation)))),
+            (x_1+trirad*math.sin(math.radians(rotation-120)), y_1+trirad*math.cos(math.radians(rotation-120))),
+            (x_1+trirad*math.sin(math.radians(rotation+120)), y_1+trirad*math.cos(math.radians(rotation+120)))
+        ]
+
+        drawer.polygon(points, fill=self.theme.move_arrow_color)
+
+        self.board.paste(arrow_image, mask= arrow_image)
+
     def pgn2fen(self, raw_pgn):
         """
         Generate array of game FENs from pgn moves
@@ -177,7 +234,7 @@ class Board:
         default_fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'.split('/')
         piece_position  = [''] * 64
         default_fen.reverse()
-        game_fens = [('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR', None)]
+        game_fens = [('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR', None, None)]
         index=0
         for row_fen in default_fen:
             for piece in row_fen:
@@ -211,7 +268,7 @@ class Board:
             # for example Rhf8, move the root from h column to f8 (h8f8)
 
             player = 'w'
-
+            from_square = None
             if move_index %2 ==1:
                 player = 'b'
 
@@ -228,7 +285,7 @@ class Board:
                     piece_position[62] = 'k'
                     piece_position[60] = ''
 
-                game_fens.append((piece_position_to_fen(piece_position), None))
+                game_fens.append((piece_position_to_fen(piece_position), None, None))
                 continue
 
             if move in ["O-O-O", 'o-o-o']:
@@ -244,7 +301,7 @@ class Board:
                     piece_position[56] = ''
                     piece_position[60] = ''
 
-                game_fens.append((piece_position_to_fen(piece_position), None))
+                game_fens.append((piece_position_to_fen(piece_position), None, None))
                 continue
 
 
@@ -264,8 +321,10 @@ class Board:
                         print("captured_and_promote", raw_move, from_pawn_cell, raw_move[0])
                         piece_position[from_pawn_cell] = ''
                         index = get_index_of_square(pawn_cell[-2:])
+                        from_square = reverse_index_to_square(from_pawn_cell)
                         # raise Exception('stop')
                     else:
+                        from_square = reverse_index_to_square(index-8)
                         piece_position[index - 8] = '' # reset previous paw
 
                     piece_position[index] = promoted_piece.upper()
@@ -273,19 +332,20 @@ class Board:
 
                 if player == 'b':
                     print('black promotion come here', raw_move, captured_and_promote)
-                    print('index', index)
                     if captured_and_promote:
                         # need to check the pawn capture move again
                         from_pawn_cell = ord(raw_move[0])- 97 + 8
                         print("captured_and_promote", raw_move, from_pawn_cell, raw_move[0], pawn_cell[-2:])
                         piece_position[from_pawn_cell] = ''
+                        from_square = reverse_index_to_square(from_pawn_cell)
                         index = get_index_of_square(pawn_cell[-2:])
                     else:
+                        from_square = reverse_index_to_square(index + 8)
                         piece_position[index + 8] = '' # reset previous pawn
 
                     piece_position[index] = promoted_piece.lower()
 
-                game_fens.append((piece_position_to_fen(piece_position), pawn_cell))
+                game_fens.append((piece_position_to_fen(piece_position), pawn_cell, from_square))
 
                 continue
 
@@ -320,7 +380,8 @@ class Board:
             if implicit_move_index > 0:
                 piece_position[index] = move_piece
                 piece_position[implicit_move_index] = ''
-                game_fens.append((piece_position_to_fen(piece_position), move_square))
+                game_fens.append((piece_position_to_fen(piece_position), move_square,
+                                  reverse_index_to_square(implicit_move_index)))
                 continue
 
             # #white pawn move
@@ -338,6 +399,7 @@ class Board:
                         if piece_position[target_index] =='':
                             print('en passant move', move_square ,index)
                             piece_position[index - 8] = ''
+                            from_square = reverse_index_to_square(index - 8)
                         else:
                             if current_col < original_move_piece:
                                 possible_indexes = [index-7]
@@ -349,15 +411,18 @@ class Board:
                     friendly_print_move(move_piece, possible_indexes)
                     if len(possible_indexes) > 0:
                         piece_position[possible_indexes[0]] = ''
+                        from_square = reverse_index_to_square(possible_indexes[0])
                 else:
                     possible_index_1 = index - 8
                     possible_index_2 = index - 16
 
                     if possible_index_1> 0 and piece_position[possible_index_1] == 'P':
                         piece_position[possible_index_1] = ''
+                        from_square = reverse_index_to_square(possible_index_1)
                     # need check first move
                     if possible_index_2> 0 and piece_position[possible_index_2] == 'P':
                         piece_position[possible_index_2]=''
+                        from_square = reverse_index_to_square(possible_index_2)
             # Black pawn moves
             if move_piece == 'p':
 
@@ -374,15 +439,18 @@ class Board:
                     possible_indexes =  [ move for move in  possible_indexes if piece_position[move] == move_piece]
                     if len(possible_indexes) > 0:
                         piece_position[possible_indexes[0]] = ''
+                        from_square = reverse_index_to_square(possible_indexes[0])
                 else:
                     possible_index_1 = index +8
                     possible_index_2 = index + 16
 
                     if possible_index_1> 0 and piece_position[possible_index_1] == 'p':
                         piece_position[possible_index_1]=''
+                        from_square = reverse_index_to_square(possible_index_1)
                     # need check first move
                     if possible_index_2> 0 and piece_position[possible_index_2] == 'p':
                         piece_position[possible_index_2]=''
+                        from_square = reverse_index_to_square(possible_index_1)
 
             ## Knight move
             if move_piece in ['N' ,'n']:
@@ -395,6 +463,7 @@ class Board:
                 # print('possible_indexes', move_index, possible_indexes)
                 if len(possible_indexes) > 0:
                     piece_position[possible_indexes[0]]= ''
+                    from_square = reverse_index_to_square(possible_indexes[0])
 
             # Bishop move
 
@@ -404,6 +473,7 @@ class Board:
                 # print ('possible_indexes', possible_indexes)
                 if len(possible_indexes) > 0:
                     piece_position[possible_indexes[0]] = ''
+                    from_square = reverse_index_to_square(possible_indexes[0])
 
             # Rook Moves
             if move_piece  in ['R', 'r']:
@@ -411,12 +481,14 @@ class Board:
                 friendly_print_move(move_piece, possible_indexes)
                 if len(possible_indexes) > 0:
                     piece_position[possible_indexes[0]] = ''
+                    from_square = reverse_index_to_square(possible_indexes[0])
 
             # King
             if move_piece in ['K', 'k']:
                 king_index = piece_position.index(move_piece)
                 if king_index > 0:
                     piece_position[king_index] = ''
+                    from_square = reverse_index_to_square(king_index)
 
 
             if move_piece  in ['Q', 'q']:
@@ -425,6 +497,7 @@ class Board:
                 friendly_print_move(move_piece, possible_indexes)
                 if len(possible_indexes) >= 1:
                     piece_position[possible_indexes[0]] = ''
+                    from_square = reverse_index_to_square(possible_indexes[0])
                 else:
                     print('need to handle if there is more than 1 queen')
                     # raise Exception('error')
@@ -432,7 +505,7 @@ class Board:
             piece_position[index] = move_piece
 
             final_fen = piece_position_to_fen(piece_position)
-            game_fens.append((final_fen, move_square) )
+            game_fens.append((final_fen, move_square, from_square) )
 
             if is_checkmate:
                 # if find the check mate, break the loop
@@ -451,15 +524,19 @@ class Board:
     #
     #    return fens
 
-    def generate_gif_from_pgn(self, pgn):
+    def generate_gif_from_pgn(self, pgn, move_arrow= False):
         """Generate the gif image for pgn moves"""
         fens = self.pgn2fen(pgn)
         # fens = self.fens(pgn)
         images = []
         for game_fen in fens:
-            fen, last_move_square = game_fen
+            fen, last_move_square , move_from_square= game_fen
             self.fen = fen
-            move_image = self.generate(last_move_square)
+            # print('last_move_square , move_from_square', last_move_square , move_from_square)
+            arrow_squares = None
+            if last_move_square and move_from_square and move_arrow:
+                arrow_squares = (move_from_square, last_move_square)
+            move_image = self.generate(move_from_square,last_move_square, arrow_squares=arrow_squares)
             images.append(move_image)
 
         return images
