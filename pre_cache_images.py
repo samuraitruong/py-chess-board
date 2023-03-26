@@ -1,10 +1,10 @@
-
+"""Cache images"""
 import os
 
 from app.lib.board import Board
 
 def cache_all() :
-
+    """Cache all image by call all piece set to generate svg"""
     piece_set_folder = os.getcwd() + '/app/pieces'
 
     subfolders= [f.name for f in os.scandir(piece_set_folder) if f.is_dir()]
