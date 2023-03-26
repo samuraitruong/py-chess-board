@@ -15,5 +15,6 @@ EXPOSE 8080
 RUN chmod +x ./start.sh
 ENV PYTHON_ENV=production
 ENV FLASK_APP=app/main.py
+RUN python pre_cache_images.py
 # CMD [ "python3", "app/main.py"]
 CMD ["sh", "/app/start.sh"]

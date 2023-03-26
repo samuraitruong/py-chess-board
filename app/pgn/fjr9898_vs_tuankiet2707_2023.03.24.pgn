@@ -1,0 +1,21 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2023.03.24"]
+[Round "?"]
+[White "fjr9898"]
+[Black "tuankiet2707"]
+[Result "0-1"]
+[ECO "C25"]
+[WhiteElo "412"]
+[BlackElo "421"]
+[TimeControl "600"]
+[EndTime "0:13:13 PDT"]
+[Termination "tuankiet2707 won by checkmate"]
+
+1. e4 e5 2. Nc3 Bc5 3. Nf3 Nf6 4. Bc4 Nc6 5. d3 Ng4 6. Bg5 f6 7. Bh4 g5 8. Bg3
+Qe7 9. Qe2 Nxf2 10. O-O d5 11. exd5 Nb4 12. Bxf2 Bxf2+ 13. Rxf2 Bg4 14. Ne4
+O-O-O 15. d6 cxd6 16. h3 Bxf3 17. Qxf3 b6 18. Re1 b5 19. Bxb5 Nxa2 20. d4 exd4
+21. Qb3 d5 22. Bc6 dxe4 23. Rfe2 f5 24. g4 e3 25. c3 f4 26. cxd4 Rxd4 27. Rc2
+Qc7 28. Qe6+ Kb8 29. Qf6 Rhd8 30. b4 Nxb4 31. Rcc1 Nd3 32. Rb1+ Kc8 33. Qe6+
+R8d7 34. Bxd7+ Qxd7 35. Rec1+ Nxc1 36. Rxc1+ Kd8 37. Qf6+ Ke8 38. Qh8+ Ke7 39.
+Qxh7+ Ke6 40. Rc7 Rd1+ 41. Kg2 Qd5+ 42. Kh2 Qh1# 0-1

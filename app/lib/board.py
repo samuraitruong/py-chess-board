@@ -216,12 +216,12 @@ class Board:
 
             # if(x_1 == x_0):
             if y_0 != y_1 and arrow_head:
-                shorter_arrow = 30 * (y_0- y_1)/(abs (y_0-y_1))
+                shorter_arrow = 35 * (y_0- y_1)/(abs (y_0-y_1))
                 y_1 = y_1 + shorter_arrow
 
             # if(y_1 == y_0):
             if x_0 != x_1 and arrow_head:
-                shorter_arrow = 30 * (x_0- x_1)/(abs (x_0-x_1))
+                shorter_arrow = 35 * (x_0- x_1)/(abs (x_0-x_1))
                 x_1 = x_1 + shorter_arrow
 
             drawer.line(((x_0, y_0),( x_1, y_1)), fill  = self.theme.move_arrow_color, width=30)
