@@ -12,4 +12,4 @@ class IcySeaTheme(Theme): # pylint: disable=too-few-public-methods
         self.base_color = '#7B9FB3'
         self.frame_text_color = '#E4E9EB'
         self.border_outline_color = '#E4E9EB'
-        self.active_square_color = '#e0dfd3'
+        self.active_square_color = '#e0dfd3cc'

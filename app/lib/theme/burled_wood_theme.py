@@ -12,4 +12,4 @@ class BurledWoodTheme(Theme): # pylint: disable=too-few-public-methods
         self.base_color = '#62361D'
         self.frame_text_color = '#F0CA9E'
         self.border_outline_color = '#8A5333'
-        self.active_square_color = '#1a9c71'
+        self.active_square_color = '#1a9c71cc'

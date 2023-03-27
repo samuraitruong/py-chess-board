@@ -12,4 +12,4 @@ class WalnutTheme(Theme): # pylint: disable=too-few-public-methods
         self.base_color = '#73523A'
         self.frame_text_color = '#BFA482'
         self.border_outline_color = '#BFA482'
-        self.active_square_color = '#e0dfd3'
+        self.active_square_color = '#e0dfd3cc'

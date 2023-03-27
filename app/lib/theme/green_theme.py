@@ -12,4 +12,4 @@ class GreenTheme(Theme): # pylint: disable=too-few-public-methods
         self.base_color = '#302E2B'
         self.frame_text_color = '#EDEED2'
         self.border_outline_color = '#402E2B'
-        self.active_square_color = '#f7e225'
+        self.active_square_color = '#f7e225cc'

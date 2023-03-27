@@ -12,4 +12,4 @@ class TournamentTheme(Theme): # pylint: disable=too-few-public-methods
         self.base_color = '#32684A'
         self.frame_text_color = '#EAEBE9'
         self.border_outline_color = '#EAEBE9'
-        self.active_square_color = '#1a9c71'
+        self.active_square_color = '#1a9c71cc'

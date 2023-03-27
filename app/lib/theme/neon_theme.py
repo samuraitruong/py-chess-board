@@ -12,4 +12,4 @@ class NeonTheme(Theme): # pylint: disable=too-few-public-methods
         self.base_color = '#574F4B'
         self.frame_text_color = '#C7CACA'
         self.border_outline_color = '#C7CACA'
-        self.active_square_color = '#f7e225'
+        self.active_square_color = '#f7e225cc'

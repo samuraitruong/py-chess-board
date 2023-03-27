@@ -12,4 +12,4 @@ class BlueTheme(Theme): # pylint: disable=too-few-public-methods
         self.base_color = '#4C7399'
         self.frame_text_color = '#EAE9D2'
         self.border_outline_color = '#EAE9D2'
-        self.active_square_color = '#2F88FF'
+        self.active_square_color = '#2F88FFCC'

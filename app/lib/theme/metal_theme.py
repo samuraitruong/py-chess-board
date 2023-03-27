@@ -12,4 +12,4 @@ class MetalTheme(Theme): # pylint: disable=too-few-public-methods
         self.base_color = '#858585'
         self.frame_text_color = '#222'
         self.border_outline_color = '#898989'
-        self.active_square_color = '#1a9c71'
+        self.active_square_color = '#1a9c71cc'

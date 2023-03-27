@@ -11,5 +11,5 @@ class SandTheme(Theme): # pylint: disable=too-few-public-methods
         self.black_color = '#242424'
         self.base_color = '#BFAA95'
         self.frame_text_color = '#eeeeee'
-        self.border_outline_color = '#DDCEC0'
-        self.active_square_color = '#1a9c71'
+        self.border_outline_color = '#DDCECcc0'
+        self.active_square_color = '#1a9c71cc'

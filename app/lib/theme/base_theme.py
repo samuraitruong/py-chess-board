@@ -15,7 +15,7 @@ class Theme: # pylint: disable=too-few-public-methods
         self.piece_set = piece_set
         self.square_border_width = 0
         self.square_border_color = None
-        self.active_square_color = 'red'
+        self.active_square_color = '#ff0000cc'
         self.board_image = None
         self.move_arrow_color = '#EA883A99'
 

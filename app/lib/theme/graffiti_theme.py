@@ -12,4 +12,4 @@ class ParchmentTheme(Theme): # pylint: disable=too-few-public-methods
         self.base_color = '#B67A35'
         self.frame_text_color = '#AAAAAA'
         self.border_outline_color = '#AAAAAA'
-        self.active_square_color = '#1a9c71'
+        self.active_square_color = '#1a9c71cc'
