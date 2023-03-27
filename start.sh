@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-if [ $PYTHON_ENV = "production" ]
+if [[ "$PYTHON_ENV" = "production" ]]
 then
     waitress-serve --call 'server:create_app'
 else

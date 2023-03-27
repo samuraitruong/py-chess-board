@@ -16,6 +16,7 @@ class Theme:  # pylint: disable=too-few-public-methods
     def __init__(self, piece_set, board_image=None):
         self.piece_set = piece_set
         self.square_border_width = 0
+        self.outline_border_width = 2
         self.square_border_color = None
         self.from_square_color = '#ff0000cc'
         self.current_square_color = '#330000cc'

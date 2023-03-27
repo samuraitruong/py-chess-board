@@ -66,6 +66,7 @@ def generate_chess_from_fen():
     theme = request.args.get('theme')
     size = int(request.args.get('size', "850"))
     view_as = request.args.get('viewer', "w")
+    # frameless = request.args.get('frameless', "1", bool)
     board = Board(fen=fen, theme=theme)
     if request.args.get('piece'):
         board.theme.set_piece_set(request.args.get('piece'))
@@ -76,6 +77,8 @@ def generate_chess_from_fen():
 def generate_gift_from_pgn():
     """Generate gift from pgn """
     pgn = request.args.get('pgn')
+    view_as = request.args.get('viewer', "w")
+
     theme = request.args.get('theme')
     move_arrow = request.args.get('arrow', False, bool)
     duration = int(request.args.get('duration', "1000"))
@@ -85,5 +88,5 @@ def generate_gift_from_pgn():
         board.theme.set_piece_set(request.args.get('piece'))
 
     images = board.generate_gif_from_pgn(pgn,
-                                         move_arrow in ['true', '1', True])
+                                         move_arrow in ['true', '1', True], viewer=view_as)
     return serve_as_gif(images, duration)

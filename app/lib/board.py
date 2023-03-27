@@ -35,6 +35,7 @@ class Board:
 
     def generate(self, moved_from_square=None, moved_to_square=None, view_as='w', arrow_squares=None):
         """Generate image"""
+        print('arrow_squares', arrow_squares)
         self.board = Image.new('RGBA', size=self.size,
                                color=self.theme.base_color)
         if self.theme.board_image:
@@ -49,12 +50,10 @@ class Board:
                 hightlighted_color = self.theme.current_square_color
 
             self.draw_square(i, hightlighted_color, view_as)
+        self.draw_frame(view_as)
 
-        self.draw_frame()
-        if view_as in ['b', 'black']:
-            return self.board.rotate(180)
         if arrow_squares:
-
+            print('arrow squaresfdsf', arrow_squares)
             self.draw_move_arrow(arrow_squares[0], arrow_squares[1])
         # sample knight move
         # self.draw_move_arrow('c3', 'e4')
@@ -63,6 +62,8 @@ class Board:
         # self.draw_move_arrow('c1', 'd1')
         # self.draw_move_arrow('h8', 'h4')
         # self.draw_move_arrow('e7', 'a7')
+        if view_as in ['b', 'black']:
+            return self.board.rotate(180)
         return self.board
 
     def find_piece(self, row, col):
@@ -82,7 +83,7 @@ class Board:
     def draw_square(self,  index, hightlighted_color=None, view_as='w'):
         """Draw a specific square"""
         square = ImageDraw.Draw(self.board)
-        square_size = 100
+        square_size = self.square_size
 
         col = index % 8
         row = 8 - int(index/8)
@@ -131,7 +132,7 @@ class Board:
             self.board.paste(piece_image, (x_coord+padding,
                              y_coord+padding), mask=piece_image)
         else:
-            drawer.text((x_coord+50, y_coord + 50),
+            drawer.text((x_coord+self.square_size/2, y_coord + self.square_size/2),
                         self.find_piece(row, col),
                         fill='red',
                         font=self.theme.font.get('large')
@@ -143,55 +144,65 @@ class Board:
                         font=self.theme.font.get('regular')
                         )
 
-    def draw_frame(self):
+    def draw_frame(self, view_as):
         """ Draw the number and column name on edge of board"""
-        drawer = ImageDraw.Draw(self.board)
-        frame_image = Image.new('RGB', size=(
+        is_black_view = view_as in ['black', 'b']
+        drawer = ImageDraw.Draw(self.board, 'RGBA')
+        frame_image = Image.new('RGBA', size=(
             850, self.frame_size), color=self.theme.base_color)
-        drawer_top = ImageDraw.Draw(frame_image)
+
+        vertical_image = Image.new('RGBA', size=(
+            self.frame_size, 850), color=None)
+
+        drawer_top = ImageDraw.Draw(frame_image, 'RGBA')
+        drawer_number = ImageDraw.Draw(vertical_image, 'RGBA')
+
         for i in range(1, 9):
-            width, height = drawer.textsize(chr(i + 96),
+            display_num = str(i)
+            display_col = chr(i + 96)
+
+            if is_black_view:
+                display_num = str(9-i)
+                display_col = chr(-i + 9 + 96)
+
+            width, height = drawer.textsize(display_col,
                                             font=self.theme.font.get('regular')
                                             )
 
-            drawer.text((self.frame_size + i * 100 - 50 - width/2,  827), chr(i + 96),
-                        fill=self.theme.frame_text_color,
-                        font=self.theme.font.get('regular')
-                        )
-
-            drawer_top.text((self.frame_size + i * 100 - 50 - width/2,  int(self.frame_size - height)/2 - 2),
-                            chr(-i + 9 + 96),
+            drawer_top.text((self.frame_size + i * self.square_size - self.square_size/2 - width/2,  2), display_col,
                             fill=self.theme.frame_text_color,
                             font=self.theme.font.get('regular')
                             )
 
-            width, height = drawer.textsize(str(i),
-                                            font=self.theme.font.get('regular')
-                                            )
+            width, height = drawer_top.textsize(display_num,
+                                                font=self.theme.font.get(
+                                                    'regular')
+                                                )
 
-            drawer.text((10,  800 + 2 * self.frame_size - i * 100 + height), str(i),
-                        fill=self.theme.frame_text_color,
-                        font=self.theme.font.get('regular')
-                        )
+            drawer_number.text((10,  800 + 2 * self.frame_size - i * self.square_size + height), display_num,
+                               fill=self.theme.frame_text_color,
+                               font=self.theme.font.get('regular')
+                               )
+        if is_black_view:
+            vertical_image = vertical_image.rotate(180)
 
-            drawer.text((830,  800 + 2 * self.frame_size - i * 100 + height), str(i),
-                        fill=self.theme.frame_text_color,
-                        font=self.theme.font.get('regular')
-                        )
-            # Draw other text
+        self.board.paste(
+            frame_image, (0, 8 * self.square_size + self.frame_size))
+        self.board.paste(frame_image.rotate(180), (0, 0))
+        self.board.paste(vertical_image, (0, 0), mask=vertical_image)
+        self.board.paste(vertical_image, (8 * self.square_size +
+                         self.frame_size, 0), mask=vertical_image)
 
-        rotate_image = frame_image.rotate(180)
-        self.board.paste(rotate_image, (0, 0))
         drawer.rectangle(
             (
-                self.frame_size-2,
-                self.frame_size-2,
-                800 + self.frame_size + 2,
-                800 + self.frame_size + 2
+                self.frame_size - self.theme.outline_border_width,
+                self.frame_size - self.theme.outline_border_width,
+                800 + self.frame_size,
+                800 + self.frame_size
             ),
             fill=None,
             outline=self.theme.border_outline_color,
-            width=2
+            width=self.theme.outline_border_width
         )
 
     def draw_move_arrow(self, from_square, to_square, arrow_head=True, draw_circle=False):
@@ -200,8 +211,8 @@ class Board:
         start_x, start_y = get_square_coordinates(
             from_square, self.square_size)
         end_x, end_y = get_square_coordinates(to_square, self.square_size)
-        diff_x = abs(int((start_x - end_x) / 100))
-        diff_y = abs(int((start_y - end_y)/100))
+        diff_x = abs(int((start_x - end_x) / self.square_size))
+        diff_y = abs(int((start_y - end_y)/self.square_size))
 
         if (diff_x == 2 and diff_y == 1) or (diff_x == 1 and diff_y == 2):
             line1, line2 = break_down_knight_move((from_square, to_square))
@@ -567,7 +578,7 @@ class Board:
     #
     #    return fens
 
-    def generate_gif_from_pgn(self, pgn, move_arrow=False):
+    def generate_gif_from_pgn(self, pgn, move_arrow=False, viewer='w'):
         """Generate the gif image for pgn moves"""
         fens = self.pgn2fen(pgn)
         # fens = self.fens(pgn)
@@ -580,7 +591,7 @@ class Board:
             if last_move_square and move_from_square and move_arrow:
                 arrow_squares = (move_from_square, last_move_square)
             move_image = self.generate(
-                move_from_square, last_move_square, arrow_squares=arrow_squares)
+                move_from_square, last_move_square, arrow_squares=arrow_squares, view_as=viewer)
             images.append(move_image)
 
         return images
