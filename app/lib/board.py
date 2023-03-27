@@ -35,7 +35,6 @@ class Board:
 
     def generate(self, moved_from_square=None, moved_to_square=None, view_as='w', arrow_squares=None):
         """Generate image"""
-        print('arrow_squares', arrow_squares)
         self.board = Image.new('RGBA', size=self.size,
                                color=self.theme.base_color)
         if self.theme.board_image:
@@ -53,7 +52,6 @@ class Board:
         self.draw_frame(view_as)
 
         if arrow_squares:
-            print('arrow squaresfdsf', arrow_squares)
             self.draw_move_arrow(arrow_squares[0], arrow_squares[1])
         # sample knight move
         # self.draw_move_arrow('c3', 'e4')
@@ -289,10 +287,10 @@ class Board:
                     index += 1
 
         # loop throught the PGN step and generate all the FEN
-        pgn_moves = [move for move in pgn.split(' ')
+        pgn_moves = [move.strip() for move in pgn.split(' ')
                      if "." not in move
                      and len(move) > 0
-                     and move not in ['1-0', '0-1', '1/2-1-2', "*"]]
+                     and move.strip() not in ['1-0', '0-1', '1/2-1/2', "*"]]
 
         board_cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
         for move_index, raw_move in enumerate(pgn_moves):

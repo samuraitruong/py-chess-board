@@ -1,0 +1,39 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2023.03.27"]
+[Round "-"]
+[White "godatchess2823"]
+[Black "tuankiet2707"]
+[Result "1/2-1/2"]
+[CurrentPosition "8/3k4/8/8/1K6/8/8/8 b - -"]
+[Timezone "UTC"]
+[ECO "C20"]
+[ECOUrl "https://www.chess.com/openings/Kings-Pawn-Opening-The-Whale-Variation"]
+[UTCDate "2023.03.27"]
+[UTCTime "08:52:19"]
+[WhiteElo "709"]
+[BlackElo "500"]
+[TimeControl "600"]
+[Termination "Game drawn by insufficient material"]
+[StartTime "08:52:19"]
+[EndDate "2023.03.27"]
+[EndTime "08:59:30"]
+[Link "https://www.chess.com/game/live/73645881335"]
+[WhiteUrl "https://www.chess.com/bundles/web/images/noavatar_l.84a92436.gif"]
+[WhiteCountry "136"]
+[WhiteTitle ""]
+[BlackUrl "https://images.chesscomfiles.com/uploads/v1/user/243921949.2b1187d0.50x50o.58977e3fe2fd.png"]
+[BlackCountry "17"]
+[BlackTitle ""]
+
+1. c4 e5 2. e4 Nc6 3. Be2 Nf6 4. Bh5 Bc5 5. Bxf7+ Kxf7 6. Nf3 d6 7. Nxe5+ Nxe5
+8. Qe2 Nxe4 9. Qh5+ g6 10. Qh4 Nxf2 11. O-O Nxc4 12. Rxf2+ Ke8 13. Qh3 Bxf2+ 14.
+Kxf2 Bxh3 15. gxh3 Qh4+ 16. Kf3 Qg3+ 17. Ke4 Qc3 18. bxc3 d5+ 19. Kxd5 Rd8+ 20.
+Ke6 Kf8 21. Na3 Re8+ 22. Kd5 Nb6+ 23. Kc5 Nd7+ 24. Kb4 Nb6 25. Rb1 Nd5+ 26. Kc4
+Nb6+ 27. Kb4 Nd5+ 28. Kc4 Nb6+ 29. Kb5 a6+ 30. Kb4 Re4+ 31. Nc4 Rxc4+ 32. Kb3
+Rh4 33. Bb2 Rxh3 34. Rh1 Rxh2 35. Rxh2 Kg7 36. Ba3 g5 37. Be7 Nd5 38. Bd8 Rxd8
+39. Rf2 g4 40. Rg2 h5 41. Rh2 g3 42. Rxh5 Rh8 43. Rxd5 g2 44. Rg5+ Kh6 45. Rxg2
+c5 46. Rh2+ Kg7 47. Rg2+ Kf8 48. Rg5 Rg8 49. Rxc5 b6 50. Rc6 a5 51. Rxb6 Kf7 52.
+Ra6 a4+ 53. Rxa4 Rg3 54. Rb4 Rg2 55. d4 Rd2 56. d5 Rxd5 57. c4 Rd3+ 58. Ka4 Rd2
+59. c5 Rxa2+ 60. Kb3 Ra5 61. c6 Ra8 62. Rc4 Ke7 63. c7 Kd7 64. Kb4 Rc8 65. Kb5
+Rxc7 66. Rb4 Rb7+ 67. Ka5 Ra7+ 68. Kb5 Rb7+ 69. Kc4 Rxb4+ 70. Kxb4 1/2-1/2

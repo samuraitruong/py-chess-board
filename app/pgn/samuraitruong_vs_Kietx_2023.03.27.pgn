@@ -1,0 +1,35 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2023.03.27"]
+[Round "-"]
+[White "samuraitruong"]
+[Black "Kietx"]
+[Result "1/2-1/2"]
+[CurrentPosition "7k/4N1p1/p6p/8/8/1Q6/5KP1/r7 b - -"]
+[Timezone "UTC"]
+[ECO "C50"]
+[ECOUrl "https://www.chess.com/openings/Giuoco-Piano-Game-4.O-O-Nf6-5.Nc3-d6"]
+[UTCDate "2023.03.27"]
+[UTCTime "10:45:04"]
+[WhiteElo "868"]
+[BlackElo "976"]
+[TimeControl "600"]
+[Termination "Game drawn by agreement"]
+[StartTime "10:45:04"]
+[EndDate "2023.03.27"]
+[EndTime "10:57:35"]
+[Link "https://www.chess.com/game/live/73653012189"]
+[WhiteUrl "https://images.chesscomfiles.com/uploads/v1/user/55449522.f4cb0d1b.50x50o.c7fb06918f51.png"]
+[WhiteCountry "17"]
+[WhiteTitle ""]
+[BlackUrl "https://images.chesscomfiles.com/uploads/v1/user/169337083.54028726.50x50o.efba79e6430a.jpeg"]
+[BlackCountry "17"]
+[BlackTitle ""]
+
+1. e4 e5 2. Nf3 Nc6 3. Nc3 Bc5 4. Bc4 d6 5. O-O Nf6 6. d3 Be6 7. b3 O-O 8. Bg5
+a6 9. Bxf6 Qxf6 10. Re1 b5 11. Bxe6 fxe6 12. a4 Nd4 13. Nxd4 Bxd4 14. Qd2 Bxf2+
+15. Kh1 Bxe1 16. Qxe1 bxa4 17. bxa4 d5 18. exd5 exd5 19. Nxd5 Qc6 20. Ne7+ Kh8
+21. Nxc6 Rf6 22. Qe4 Raf8 23. h3 Rf4 24. Qxe5 R8f5 25. Qxc7 Rf7 26. Qc8+ Rf8 27.
+Qe6 R4f6 28. Qe7 R6f7 29. Qe2 Rf2 30. Qe3 Rxc2 31. Rf1 Rxf1+ 32. Kh2 h6 33. d4
+Rff2 34. Qg3 Kh7 35. h4 Rfd2 36. Ne7 Rxd4 37. Qg6+ Kh8 38. Qxc2 Rxh4+ 39. Kg1
+Rd4 40. Qb2 Rxa4 41. Qb3 Ra1+ 42. Kf2 1/2-1/2
