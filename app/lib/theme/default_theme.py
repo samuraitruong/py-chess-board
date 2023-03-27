@@ -2,9 +2,10 @@
 from app.lib.theme.base_theme import Theme
 
 
-class DefaultTheme(Theme): # pylint: disable=too-few-public-methods
+class DefaultTheme(Theme):  # pylint: disable=too-few-public-methods
     """Provides default look and feels"""
-    def __init__(self, piece_set = 'chessmonk'):
+
+    def __init__(self, piece_set='chessmonk'):
         """set default look and feel"""
         super().__init__(piece_set)
         self.white_color = '#eeeee4'
@@ -12,5 +13,6 @@ class DefaultTheme(Theme): # pylint: disable=too-few-public-methods
         self.base_color = '#4e2b14'
         self.frame_text_color = '#fff'
         self.border_outline_color = '#5e483e'
-        self.active_square_color = '#ed2d18cc'
+        self.from_square_color = '#ed2d187D'
+        self.current_square_color = '#ed2d18cc'
         self.move_arrow_color = '#00aa00aa'

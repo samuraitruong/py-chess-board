@@ -1,6 +1,6 @@
 ## Introduction
 
-This is the python API to render the chessboard as images from FEN input, it supports various piece set and themes.  The most popular use of this may be  the website that display puzzle
+This is the python API to render the chessboard as images from FEN input, it supports various piece sets and themes.  The most popular use of this may be  the website that displays puzzle
 ## Development
 ```sh
 python3 -m venv .venv
@@ -15,7 +15,7 @@ docker compose up
 
 ```
 
-To debug the board with the cell index, just need to set DEBUG=1 when run the application
+To debug the board with the cell index, just need to set DEBUG=1 when running the application
 
 ```sh
 DEBUG=1 ./start.sh
@@ -24,7 +24,7 @@ DEBUG=1 ./start.sh
 
 The live demo deployed on: https://chess-board.fly.dev
 
-For a quick test please visit http://localhost:8080/playground or https://chess-board.fly.dev/playground . it contains the a simple hml page allow change the input and see the image in live demo
+For a quick test please visit http://localhost:8080/playground or https://chess-board.fly.dev/playground. it contains a simple html page allows changes the input and seeing the image in the live demo
 
 <img width="900" alt="image" src="https://user-images.githubusercontent.com/1183138/226876151-198f8614-adb9-4d18-971f-8c2b76bd47f9.png">
 
@@ -85,12 +85,19 @@ http://localhost:8080/gif?duration=500&pgn=1. f4 e6 2. Nf3 d5 3. e3 Nf6 4. d4 Bb
 ```
 
 ## Lint code before commit
+```sh
+
+pylint **/*.py
+
+
 ```
+Format code
 
-pylint $(git ls-files '*.py')
+```sh
+
+autopep8 --in-place --recursive .
 
 ```
-
 ## Request with custom FEN
 
 ```

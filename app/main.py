@@ -11,16 +11,18 @@ api = Flask(__name__,
             static_url_path='/static',
             static_folder=os.getcwd() + '/app/pgn',)
 
+
 @api.after_request
 def add_header(response):
     """
     Add no-cache header to response headers
     """
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "0"
+    response.headers["Cache-Control"] = 'no-cache, no-store, must-revalidate'
+    response.headers["Pragma"] = 'no-cache'
+    response.headers["Expires"] = '0'
     response.headers['Cache-Control'] = 'public, max-age=0'
     return response
+
 
 @api.route("/playground")
 def playground():
@@ -30,11 +32,12 @@ def playground():
     folder = os.getcwd() + '/app/pgn'
     piece_set_folder = os.getcwd() + '/app/pieces'
 
-    onlyfiles = [f for f in os.listdir(folder) if isfile(join(folder, f)) and '.pgn'  in f]
+    onlyfiles = [f for f in os.listdir(folder) if isfile(
+        join(folder, f)) and '.pgn' in f]
     onlyfiles.sort()
     fens = []
 
-    with open(os.getcwd() +'/app/pgn/puzzle.txt', 'r', encoding="utf-8") as puzzle_file:
+    with open(os.getcwd() + '/app/pgn/puzzle.txt', 'r', encoding="utf-8") as puzzle_file:
         fens = puzzle_file.readlines()
 
     data_sources = []
@@ -43,17 +46,18 @@ def playground():
             pgn = pgn_file.read()
             index = pgn.index('1. ')
             pgn_only = pgn[index-2:].replace('\n', ' ')
-            data_sources.append((file_name,pgn_only ))
+            data_sources.append((file_name, pgn_only))
     # piece_sets = []
 
-    subfolders= [f.name for f in os.scandir(piece_set_folder) if f.is_dir()]
+    subfolders = [f.name for f in os.scandir(piece_set_folder) if f.is_dir()]
     subfolders.sort()
     return render_template('playground.html',
-                           data_sources= data_sources,
-                           themes = Theme.get_theme_list(),
-                           piece_sets = subfolders,
-                           fen_sources = fens
+                           data_sources=data_sources,
+                           themes=Theme.get_theme_list(),
+                           piece_sets=subfolders,
+                           fen_sources=fens
                            )
+
 
 @api.route("/")
 def generate_chess_from_fen():
@@ -62,10 +66,11 @@ def generate_chess_from_fen():
     theme = request.args.get('theme')
     size = int(request.args.get('size', "850"))
     view_as = request.args.get('viewer', "w")
-    board = Board(fen  = fen, theme = theme )
+    board = Board(fen=fen, theme=theme)
     if request.args.get('piece'):
         board.theme.set_piece_set(request.args.get('piece'))
     return serve_pil_image(board.generate(view_as=view_as), size)
+
 
 @api.route("/gif")
 def generate_gift_from_pgn():
@@ -75,10 +80,10 @@ def generate_gift_from_pgn():
     move_arrow = request.args.get('arrow', False, bool)
     duration = int(request.args.get('duration', "1000"))
     # size = int(request.args.get('size', "400"))
-    board = Board( theme = theme, debug=os.environ.get('DEBUG', '0') == "1" )
+    board = Board(theme=theme, debug=os.environ.get('DEBUG', '0') == '1')
     if request.args.get('piece'):
         board.theme.set_piece_set(request.args.get('piece'))
 
-    images =  board.generate_gif_from_pgn(pgn,
-                move_arrow in ['true', '1', True])
+    images = board.generate_gif_from_pgn(pgn,
+                                         move_arrow in ['true', '1', True])
     return serve_as_gif(images, duration)

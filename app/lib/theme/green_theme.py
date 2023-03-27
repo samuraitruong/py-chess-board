@@ -2,9 +2,10 @@
 from app.lib.theme.base_theme import Theme
 
 
-class GreenTheme(Theme): # pylint: disable=too-few-public-methods
+class GreenTheme(Theme):  # pylint: disable=too-few-public-methods
     """Provides default look and feels"""
-    def __init__(self, piece_set = 'cburnett', board_image = 'app/boards/green.png'):
+
+    def __init__(self, piece_set='cburnett', board_image='app/boards/green.png'):
         """constructor"""
         super().__init__(piece_set)
         self.white_color = '#EDEED2'
@@ -12,4 +13,4 @@ class GreenTheme(Theme): # pylint: disable=too-few-public-methods
         self.base_color = '#302E2B'
         self.frame_text_color = '#EDEED2'
         self.border_outline_color = '#402E2B'
-        self.active_square_color = '#f7e225cc'
+        self.from_square_color = '#f7e225cc'

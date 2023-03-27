@@ -3,6 +3,7 @@
 import json
 from app.lib.board import Board
 
+
 def test_pgn2fen_1(snapshot):
     """Test get_index_of_square"""
     board = Board()
@@ -17,7 +18,9 @@ Kxf8 34. c8=Q+ Kf7 35. Qxa8 Kf6 36. Qf8+ Kg5 37. Kh3 Qe3+ 38. g3 h4 39. Qe7+ Kh5
     """
 
     result = board.pgn2fen(pgn)
-    snapshot.assert_match(json.dumps(result, indent=2), "pgn2fen_test_output_1.json")
+    snapshot.assert_match(json.dumps(result, indent=2),
+                          "pgn2fen_test_output_1.json")
+
 
 def test_pgn2fen_2(snapshot):
     """Test get_index_of_square"""
@@ -27,4 +30,5 @@ def test_pgn2fen_2(snapshot):
     """
 
     result = board.pgn2fen(pgn)
-    snapshot.assert_match(json.dumps(result, indent=2), "pgn2fen_test_output_2.json")
+    snapshot.assert_match(json.dumps(result, indent=2),
+                          "pgn2fen_test_output_2.json")
