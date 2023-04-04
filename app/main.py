@@ -66,11 +66,12 @@ def generate_chess_from_fen():
     theme = request.args.get('theme')
     size = int(request.args.get('size', "850"))
     view_as = request.args.get('viewer', "w")
-    # frameless = request.args.get('frameless', "1", bool)
+    frameless = request.args.get('frame') == "false"
+
     board = Board(fen=fen, theme=theme)
     if request.args.get('piece'):
         board.theme.set_piece_set(request.args.get('piece'))
-    return serve_pil_image(board.generate(view_as=view_as), size)
+    return serve_pil_image(board.generate(view_as=view_as, frameless=frameless), size)
 
 
 @api.route("/gif")
@@ -84,9 +85,11 @@ def generate_gift_from_pgn():
     duration = int(request.args.get('duration', "1000"))
     # size = int(request.args.get('size', "400"))
     board = Board(theme=theme, debug=os.environ.get('DEBUG', '0') == '1')
+    frameless = request.args.get('frame') == "false"
+
     if request.args.get('piece'):
         board.theme.set_piece_set(request.args.get('piece'))
 
     images = board.generate_gif_from_pgn(pgn,
-                                         move_arrow in ['true', '1', True], viewer=view_as)
+                                         move_arrow in ['true', '1', True], viewer=view_as, frameless=frameless)
     return serve_as_gif(images, duration)

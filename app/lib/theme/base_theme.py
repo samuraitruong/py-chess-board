@@ -25,7 +25,9 @@ class Theme:  # pylint: disable=too-few-public-methods
 
         self.font = {
             "large": ImageFont.truetype("app/fonts/arial/arial.ttf", 24),
-            "regular": ImageFont.truetype("app/fonts/arial/arial.ttf", 18)
+            "regular": ImageFont.truetype("app/fonts/arial/arial.ttf", 18),
+            "x-large": ImageFont.truetype("app/fonts/arial/arial.ttf", 28),
+
         }
         if board_image is not None:
             self.board_image = Image.open(board_image)

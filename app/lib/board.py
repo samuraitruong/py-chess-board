@@ -33,7 +33,7 @@ class Board:
         self.fen = fen or 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
         self.debug = debug
 
-    def generate(self, moved_from_square=None, moved_to_square=None, view_as='w', arrow_squares=None):
+    def generate(self, moved_from_square=None, moved_to_square=None, view_as='w', arrow_squares=None, frameless=False):
         """Generate image"""
         self.board = Image.new('RGBA', size=self.size,
                                color=self.theme.base_color)
@@ -49,17 +49,14 @@ class Board:
                 hightlighted_color = self.theme.current_square_color
 
             self.draw_square(i, hightlighted_color, view_as)
-        self.draw_frame(view_as)
+        self.draw_frame(view_as, frameless)
 
         if arrow_squares:
-            self.draw_move_arrow(arrow_squares[0], arrow_squares[1])
+            self.draw_move_arrow(
+                arrow_squares[0], arrow_squares[1], True, frameless=frameless)
         # sample knight move
         # self.draw_move_arrow('c3', 'e4')
-        # self.draw_move_arrow('e7', 'a4')
-        # self.draw_move_arrow('f1', 'g2')
-        # self.draw_move_arrow('c1', 'd1')
-        # self.draw_move_arrow('h8', 'h4')
-        # self.draw_move_arrow('e7', 'a7')
+
         if view_as in ['b', 'black']:
             return self.board.rotate(180)
         return self.board
@@ -142,15 +139,15 @@ class Board:
                         font=self.theme.font.get('regular')
                         )
 
-    def draw_frame(self, view_as):
+    def draw_frame(self, view_as, frameless=False):
         """ Draw the number and column name on edge of board"""
         is_black_view = view_as in ['black', 'b']
         drawer = ImageDraw.Draw(self.board, 'RGBA')
         frame_image = Image.new('RGBA', size=(
-            850, self.frame_size), color=self.theme.base_color)
+            850, self.frame_size), color='#00000000')
 
         vertical_image = Image.new('RGBA', size=(
-            self.frame_size, 850), color=None)
+            self.frame_size, 850), color='#00000000')
 
         drawer_top = ImageDraw.Draw(frame_image, 'RGBA')
         drawer_number = ImageDraw.Draw(vertical_image, 'RGBA')
@@ -177,7 +174,7 @@ class Board:
                                                     'regular')
                                                 )
 
-            drawer_number.text((10,  800 + 2 * self.frame_size - i * self.square_size + height), display_num,
+            drawer_number.text((10,  8*self.square_size + 2 * self.frame_size - i * self.square_size + height), display_num,
                                fill=self.theme.frame_text_color,
                                font=self.theme.font.get('regular')
                                )
@@ -185,8 +182,9 @@ class Board:
             vertical_image = vertical_image.rotate(180)
 
         self.board.paste(
-            frame_image, (0, 8 * self.square_size + self.frame_size))
-        self.board.paste(frame_image.rotate(180), (0, 0))
+            frame_image, (0, 8 * self.square_size + self.frame_size), mask=frame_image)
+        self.board.paste(frame_image.rotate(180), (0, 0),
+                         mask=frame_image.rotate(180))
         self.board.paste(vertical_image, (0, 0), mask=vertical_image)
         self.board.paste(vertical_image, (8 * self.square_size +
                          self.frame_size, 0), mask=vertical_image)
@@ -195,15 +193,29 @@ class Board:
             (
                 self.frame_size - self.theme.outline_border_width,
                 self.frame_size - self.theme.outline_border_width,
-                800 + self.frame_size,
-                800 + self.frame_size
+                8*self.square_size + self.frame_size,
+                8*self.square_size + self.frame_size
             ),
             fill=None,
             outline=self.theme.border_outline_color,
             width=self.theme.outline_border_width
         )
+        if frameless:
+            box_size = self.frame_size + 8 * self.square_size + self.theme.outline_border_width
 
-    def draw_move_arrow(self, from_square, to_square, arrow_head=True, draw_circle=False):
+            self.board = self.board.crop((
+                self.frame_size - self.theme.outline_border_width, self.frame_size-self.theme.outline_border_width, box_size, box_size))
+
+            self.board.paste(vertical_image, (-5, 10), mask=vertical_image)
+            self.board.paste(
+                vertical_image, (8 * self.square_size - 23, 10), mask=vertical_image)
+
+            self.board.paste(
+                frame_image, (20, 8 * self.square_size - self.frame_size), mask=frame_image)
+            self.board.paste(
+                frame_image, (20, 0), mask=frame_image)
+
+    def draw_move_arrow(self, from_square, to_square, arrow_head=True, draw_circle=False, frameless=False):
         """Draw a move arrow between square and square"""
         # https://stackoverflow.com/questions/43527894/drawing-arrowheads-which-follow-the-direction-of-the-line-in-pygame
         start_x, start_y = get_square_coordinates(
@@ -214,8 +226,9 @@ class Board:
 
         if (diff_x == 2 and diff_y == 1) or (diff_x == 1 and diff_y == 2):
             line1, line2 = break_down_knight_move((from_square, to_square))
-            self.draw_move_arrow(line1[0], line1[1], False, True)
-            self.draw_move_arrow(line2[0], line2[1], True)
+            self.draw_move_arrow(line1[0], line1[1],
+                                 False, True, frameless=frameless)
+            self.draw_move_arrow(line2[0], line2[1], True, frameless=frameless)
 
         else:
             arrow_image = Image.new(
@@ -224,6 +237,8 @@ class Board:
             # reset x
             drawer = ImageDraw.Draw(arrow_image)
             center_adjustment = self.square_size/2 + self.frame_size
+            if frameless:
+                center_adjustment = center_adjustment - self.frame_size
 
             start_point = (start_x + center_adjustment,
                            start_y + center_adjustment)
@@ -274,7 +289,7 @@ class Board:
         piece_position = [''] * 64
         default_fen.reverse()
         game_fens = [
-            ('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR', None, None)]
+            ('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR', None, None, None)]
         index = 0
         for row_fen in default_fen:
             for piece in row_fen:
@@ -326,7 +341,7 @@ class Board:
                     piece_position[60] = ''
 
                 game_fens.append(
-                    (piece_position_to_fen(piece_position), None, None))
+                    (piece_position_to_fen(piece_position), None, None, raw_move))
                 continue
 
             if move in ["O-O-O", 'o-o-o']:
@@ -343,7 +358,7 @@ class Board:
                     piece_position[60] = ''
 
                 game_fens.append(
-                    (piece_position_to_fen(piece_position), None, None))
+                    (piece_position_to_fen(piece_position), None, None, raw_move))
                 continue
 
             # check for special move promotion to new piece
@@ -390,7 +405,7 @@ class Board:
                     piece_position[index] = promoted_piece.lower()
 
                 game_fens.append((piece_position_to_fen(
-                    piece_position), pawn_cell, from_square))
+                    piece_position), pawn_cell, from_square, raw_move))
 
                 continue
 
@@ -418,6 +433,14 @@ class Board:
                     # check if square is same row or same column
                     if square_name[0] == raw_move[1] or square_name[0] == raw_move[1]:
                         implicit_move_index = i
+            # R8f5 -> move the root from row 8 to F5. ie Rf8 -> f5
+            if len(move) == 4 and move[1].isdigit():
+                print('specifial move with row index', move, possible_indexes)
+                for i in possible_indexes:
+                    square_name = reverse_index_to_square(i)
+                    # check if square is same row or same column
+                    if square_name[1] == move[1] or square_name[0] == move[1]:
+                        implicit_move_index = i
 
             index = get_index_of_square(move_square)
             print(move_index, move, '->', player,
@@ -428,7 +451,7 @@ class Board:
                 piece_position[index] = move_piece
                 piece_position[implicit_move_index] = ''
                 game_fens.append((piece_position_to_fen(piece_position), move_square,
-                                  reverse_index_to_square(implicit_move_index)))
+                                  reverse_index_to_square(implicit_move_index), raw_move))
                 continue
 
             # #white pawn move
@@ -557,7 +580,7 @@ class Board:
             piece_position[index] = move_piece
 
             final_fen = piece_position_to_fen(piece_position)
-            game_fens.append((final_fen, move_square, from_square))
+            game_fens.append((final_fen, move_square, from_square, raw_move))
 
             if is_checkmate:
                 # if find the check mate, break the loop
@@ -576,20 +599,25 @@ class Board:
     #
     #    return fens
 
-    def generate_gif_from_pgn(self, pgn, move_arrow=False, viewer='w'):
+    def generate_gif_from_pgn(self, pgn, move_arrow=False, viewer='w', frameless=False):
         """Generate the gif image for pgn moves"""
         fens = self.pgn2fen(pgn)
         # fens = self.fens(pgn)
         images = []
         for game_fen in fens:
-            fen, last_move_square, move_from_square = game_fen
+            fen, last_move_square, move_from_square, raw_move = game_fen
             self.fen = fen
             # print('last_move_square , move_from_square', last_move_square , move_from_square)
             arrow_squares = None
             if last_move_square and move_from_square and move_arrow:
                 arrow_squares = (move_from_square, last_move_square)
             move_image = self.generate(
-                move_from_square, last_move_square, arrow_squares=arrow_squares, view_as=viewer)
+                move_from_square, last_move_square, arrow_squares=arrow_squares, view_as=viewer, frameless=frameless)
+            if raw_move and self.debug:
+                drawer = ImageDraw.Draw(move_image)
+                drawer.text((10, 10), raw_move, fill=(255, 255, 255),
+                            font=self.theme.font.get('x-large'))
+
             images.append(move_image)
 
         return images

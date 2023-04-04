@@ -24,7 +24,7 @@ DEBUG=1 ./start.sh
 
 The live demo deployed on: https://chess-board.fly.dev
 
-For a quick test please visit http://localhost:8080/playground or https://chess-board.fly.dev/playground. it contains a simple html page allows changes the input and seeing the image in the live demo
+For a quick test please visit http://localhost:8080/playground or https://chess-board.fly.dev/playground. it contains a simple html page allows changes in the input and seeing the image in the live demo
 
 <img width="900" alt="image" src="https://user-images.githubusercontent.com/1183138/226876151-198f8614-adb9-4d18-971f-8c2b76bd47f9.png">
 
@@ -32,11 +32,11 @@ For a quick test please visit http://localhost:8080/playground or https://chess-
 ## API params
 ### Generate board image from FEN
 - **fen**: the valid FEN string of the board
-- **size**: the size of output image
+- **size**: the size of the output image
 - **theme**: color theme of the board support (orange, green, bw and default)
 - **piece**: the piece set name, please refer below to see the full list
 - **viewer**: b or w to
-
+- **frame**: true|false or 0:1 if false, the board border will be trimmed
 example
 ```
 curl https://chess-board.fly.dev/?fen=8/4Kn2/1p1P2p1/Q1B2kp1/1P1r4/3P1N1P/4N1n1/1B2b3%20w%20-%20-%20a5%20&piece=chessmonk&theme=orange&size=500
@@ -44,12 +44,13 @@ curl https://chess-board.fly.dev/?fen=8/4Kn2/1p1P2p1/Q1B2kp1/1P1r4/3P1N1P/4N1n1/
 
 ### Generate gif from PGN
 - **pgn**: the valid FEN string of the board
-- **size**: the size of output image
+- **size**: the size of the output image
 - **theme**: color theme of the board support (orange, green, bw and default)
 - **piece**: the piece set name, please refer below to see the full list
 - **duration**: the duration between 2 move default 1000ms
 - **total_duration**: the animation length of the gif, this will overwrite the duration parameter if provided
 - **arrow**: true|false or 0:1 to draw the move arrow indicating the start and end square
+- **frame**: true|false or 0:1 if false, the board border will be trimmed
 
 Some PGN examples (you can get more from unit tests)
 

@@ -56,6 +56,8 @@
       piece_set = "";
       frame_duration = 1000;
       show_arrow = true;
+      frameMode = true;
+
       viewer = "w";
       function refreshBoardImage(data) {
         if (!data) {
@@ -77,6 +79,7 @@
           )}&t=${new Date().getTime()}`;
         }
         imageUrl = imageUrl += "&theme=" + current_theme;
+        imageUrl = imageUrl += "&frame=" + frameMode;
         if (piece_set) {
           imageUrl = imageUrl += "&piece=" + piece_set;
         }
@@ -128,13 +131,16 @@
       }
       function setShowArrow(el) {
         show_arrow = el;
-        console.log("el", el);
         refreshBoardImage();
       }
 
       function setViewer(el) {
         viewer = el ? "b" : "w";
-        console.log(el);
+        refreshBoardImage();
+      }
+
+      function setFrameless(v) {
+        frameMode = !v;
         refreshBoardImage();
       }
     </script>
@@ -191,7 +197,7 @@
 rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1</textarea
           >
           <div class="row">
-            <div class="form-check col-md-6">
+            <div class="form-check col-md-4">
               <input
                 class="form-check-input"
                 type="checkbox"
@@ -202,9 +208,14 @@ rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1</textarea
               <label class="form-check-label" for="chkMoveArrow"> Show move arrow </label>
             </div>
 
-            <div class="form-check col-md-6">
+            <div class="form-check col-md-4">
               <input class="form-check-input" type="checkbox" id="chkViewer" onchange="setViewer(this.checked)" />
               <label class="form-check-label" for="chkViewer"> View as black</label>
+            </div>
+
+            <div class="form-check col-md-4">
+              <input class="form-check-input" type="checkbox" id="chkFrame" onchange="setFrameless(this.checked)" />
+              <label class="form-check-label" for="chkFrame">Frameless</label>
             </div>
           </div>
 
