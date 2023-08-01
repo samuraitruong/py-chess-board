@@ -599,12 +599,12 @@ class Board:
     #
     #    return fens
 
-    def generate_gif_from_pgn(self, pgn, move_arrow=False, viewer='w', frameless=False):
+    def generate_gif_from_pgn(self, pgn, move_arrow=False, viewer='w', frameless=False, frames_count=1000):
         """Generate the gif image for pgn moves"""
         fens = self.pgn2fen(pgn)
         # fens = self.fens(pgn)
         images = []
-        for game_fen in fens:
+        for game_fen in fens[:frames_count]:
             fen, last_move_square, move_from_square, raw_move = game_fen
             self.fen = fen
             # print('last_move_square , move_from_square', last_move_square , move_from_square)

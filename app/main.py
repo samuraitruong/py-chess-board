@@ -77,6 +77,7 @@ def generate_chess_from_fen():
 @api.route("/gif")
 def generate_gift_from_pgn():
     """Generate gift from pgn """
+    max_frames = int(os.environ.get('MAX_FRAMES', "10000"))
     pgn = request.args.get('pgn')
     view_as = request.args.get('viewer', "w")
 
@@ -91,5 +92,8 @@ def generate_gift_from_pgn():
         board.theme.set_piece_set(request.args.get('piece'))
 
     images = board.generate_gif_from_pgn(pgn,
-                                         move_arrow in ['true', '1', True], viewer=view_as, frameless=frameless)
+                                         move_arrow in ['true', '1', True],
+                                         viewer=view_as,
+                                         frameless=frameless,
+                                         frames_count=max_frames)
     return serve_as_gif(images, duration)
